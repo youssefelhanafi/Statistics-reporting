@@ -70,7 +70,8 @@ $spreadsheet->getActiveSheet()->setTitle('Suivi des formations'); //set a title 
 
 //make object of the Xlsx class to save the excel file
 $writer = new Xlsx($spreadsheet);
-$fxls ='suivi_des_formations.xlsx';
+//$fxls ='suivi_des_formations.xlsx';
+$fxls = __DIR__ . "suivi_des_formations.xlsx";
 //$writer->save('php://output');
 $writer->save($fxls);
 header('Location: index.php'); 
