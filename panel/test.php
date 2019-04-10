@@ -1,10 +1,11 @@
 <?php
+require '/var/www/html/moodle/vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 if (isset($_POST['SubmitButton']) && isset($_POST['date'])) {
 require './config/db.php';
 //include the file that loads the PhpSpreadsheet classes
-require '/var/www/html/moodle/vendor/autoload.php';
+
 
 $sql = strval($_POST['date']);
 
