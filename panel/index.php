@@ -106,6 +106,22 @@ include'./includes/header2.php';
                     <div class="col-sm-12" align="center">
                     <label><input type="checkbox" class="agree"> Enable date</label>
                     </div>
+                    <div class="col-sm-4" align="center">
+                    Unité:
+                    <input type="text" name="unite"><br><br>
+                    </div>
+                    <div class="col-sm-4" align="center">
+                    Direction:
+                    <input type="text" name="direction"><br><br>
+                    </div>
+                    <div class="col-sm-4" align="center">
+                    Manager:
+                    <input type="text" name="manager"><br><br>
+                    </div>
+                    <div class="col-sm-12" align="center">
+                    DGA:
+                    <input type="text" name="dga"><br><br>
+                    </div>
                          ';
                 }
                 ?>
