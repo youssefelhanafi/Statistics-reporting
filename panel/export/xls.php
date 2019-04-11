@@ -7,41 +7,7 @@ if (file_exists($excellib)) {
     $config = '/var/www/html/moodle/config.php';
     if (file_exists($config)){
 
-        // Get data
-        /* $db = '/var/www/html/moodle/blocks/filtered_reporting/panel/config/db.php';
-        require $db;
-        $sql = strval($_POST['date']);
-        function GetHeaders($conn,$sql)
-        {
-            $data = Array();
-            $result = mysqli_query($conn,$sql); 
-            $i = 0; 
-            while($i<mysqli_num_fields($result)) 
-            { 
-            $meta=mysqli_fetch_field($result); 
-            array_push($data,$meta->name);
-            $i++; 
-            }
-            return $data;
-            //print_r($data);
-        }
-
-        function DatabaseData($conn,$sql)
-        {
-            $result = mysqli_query($conn,$sql);
-            $columnValues = Array();
-            while ($row = mysqli_fetch_assoc($result)){
-                $columnValues[] = $row;
-            }
-            return $columnValues;
-            //print_r($columnValues);
-        }
-
-        $headers = GetHeaders($conn,$sql);
-        $data = DatabaseData($conn,$sql); */
-
-        //echo '11';
-        //require_once
+        
         require_once($config);
         require_once($excellib);
 
@@ -87,26 +53,6 @@ if (file_exists($excellib)) {
         $data = DatabaseData($conn,$sql);
         //end get data
 
-
-
-        /* if (!empty($headers)) {
-            $countcols = count($headers);
-            $keys = array_keys($headers);
-            $lastkey = end($keys);
-            foreach ($headers as $key => $heading) {
-                    $matrix[0][$key] = str_replace("\n", ' ', htmlspecialchars_decode(strip_tags(nl2br($heading))));
-            }
-        }
-
-        if (!empty($data)) {
-            foreach ($data as $rkey => $row) {
-                foreach ($row as $key => $item) {
-                    $matrix[$rkey + 1][$key] = str_replace("\n", ' ', htmlspecialchars_decode(strip_tags(nl2br($item))));
-                }
-            }
-        } */
-
-
         $filename = 'report_'.(time());
 
         $downloadfilename = clean_filename($filename);
@@ -118,13 +64,6 @@ if (file_exists($excellib)) {
         $myxls = $workbook->add_worksheet($filename);
 
 
-        /* for ($j=0; $j <= 10; $j++) { 
-            for ($h=0; $h < 6; $h++) { 
-                $myxls->write_string($h, $j, 'a');
-            }
-            
-        } */
-
 
         for ($i=0; $i < sizeof($headers); $i++) { 
             //$sheet->setCellValueByColumnAndRow($i+1, 1, $headers[$i]);
@@ -133,7 +72,6 @@ if (file_exists($excellib)) {
             
         }
         // END Headers
-        //print_r($data);
         for ($j=1; $j < sizeof($data)+2; $j++) { 
             for ($h=0; $h < sizeof($headers); $h++) { 
                 //$sheet->setCellValueByColumnAndRow($h+1, $j, $data[$j-2][$headers[$h]]);
@@ -143,11 +81,6 @@ if (file_exists($excellib)) {
             
         }
 
-
-
-
- 
-        //$myxls->write_string($h, $j, 'a');
         $workbook->close();
         exit;
     }
