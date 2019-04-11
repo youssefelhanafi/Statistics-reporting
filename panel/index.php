@@ -145,7 +145,7 @@ include'./includes/header2.php';
     }
     else{
         $selected_val = $_POST['activite'];
-        if(!isset($_POST['debut']) && !isset($_POST['fin'])){
+        if(!isset($_POST['debut']) && !isset($_POST['fin']) && !isset($_POST['unite']) && !isset($_POST['direction']) && !isset($_POST['manager']) && !isset($_POST['dga'])){
             $sql0 = "SELECT distinct 
             cat.name AS 'CATEGORIE',c.fullname AS 'FORMATION', c.visible as 'VISIBILITE',
             CASE 
@@ -289,6 +289,10 @@ include'./includes/header2.php';
             
             $time1 = strtotime($_POST['debut'].' 02:00');
             $time2 = strtotime($_POST['fin'].' 02:00');
+            $unite = $_POST['unite'];
+            $direction = $_POST['direction'];
+            $manager = $_POST['manager'];
+            $dga = $_POST['dga'];
             //$date_inscription = strval(date('d/m/Y',$time));
             $sql0 = "SELECT distinct 
             cat.name AS 'CATEGORIE',c.fullname AS 'FORMATION', c.visible as 'VISIBILITE',
@@ -424,7 +428,13 @@ include'./includes/header2.php';
             LEFT JOIN mdl_user_info_data AS f10  ON u.id = f10.userid and f10.fieldid=10 
             LEFT JOIN mdl_user_info_data AS f17  ON u.id = f17.userid and f17.fieldid=17 
             LEFT JOIN mdl_user_info_data AS f18  ON u.id = f18.userid and f18.fieldid=18
-            where 1=1  and gi.id = $selected_val and enr.timecreated BETWEEN $time1 and $time2 
+            where 1=1  
+            and gi.id = $selected_val 
+            and enr.timecreated BETWEEN $time1 and $time2 
+            and f11.data = $unite 
+            and f24.data = $direction 
+            and f15.data = $manager 
+            and f23.data = $dga
             
             order by c.id,u.id limit 5000";
             $query0 = $db->query($sql0);
