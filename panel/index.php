@@ -473,7 +473,9 @@ include'./includes/header2.php';
         
         switch ($_GET['rapport']) {
             case '1':
-                table($query0,$sql0);
+                $vartest = strval(table($query0,$sql0));
+                print $vartest;
+                //table($query0,$sql0);
                 break;
             
             case '2':
