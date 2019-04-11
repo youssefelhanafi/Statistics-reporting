@@ -31,6 +31,7 @@
 
   <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
   <script type="text/javascript">
+      // Enable/Disable date
       $(document).ready(function(){
       $('form input[type="date"]').prop("disabled", true);
       $(".agree").click(function(){
@@ -39,6 +40,18 @@
               }
               else if($(this).prop("checked") == false){
                   $('form input[type="date"]').prop("disabled", true);
+              }
+          });
+      });
+      // Enable/Disable filtres
+      $(document).ready(function(){
+      $('form input[type="text"]').prop("disabled", true);
+      $(".agreetxt").click(function(){
+              if($(this).prop("checked") == true){
+                  $('form input[type="text"]').prop("disabled", false);
+              }
+              else if($(this).prop("checked") == false){
+                  $('form input[type="text"]').prop("disabled", true);
               }
           });
       });

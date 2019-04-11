@@ -95,32 +95,36 @@ include'./includes/header2.php';
                 <?php
                 if ($_GET['rapport'] == 1) {
                     echo '
-                    <div class="col-sm-12" align="center">
+                    <div class="col-sm-6" align="center">
                     Date début formation:
                     <input type="date" name="debut"><br><br>
                     </div>
-                    <div class="col-sm-12" align="center">
+                    <div class="col-sm-6" align="center">
                     Date fin formation:
                     <input type="date" name="fin"><br><br>
                     </div>
-                    <div class="col-sm-12" align="center">
-                    <label><input type="checkbox" class="agree"> Enable date</label>
-                    </div>
-                    <div class="col-sm-4" align="center">
+                    
+                    <div class="col" align="center">
                     Unité:
                     <input type="text" name="unite"><br><br>
                     </div>
-                    <div class="col-sm-4" align="center">
+                    <div class="col" align="center">
                     Direction:
                     <input type="text" name="direction"><br><br>
                     </div>
-                    <div class="col-sm-4" align="center">
+                    <div class="col" align="center">
                     Manager:
                     <input type="text" name="manager"><br><br>
                     </div>
-                    <div class="col-sm-12" align="center">
-                    DGA:
+                    <div class="col" align="center">
+                    Direction(dga):
                     <input type="text" name="dga"><br><br>
+                    </div>
+                    <div class="col-sm-6" align="center">
+                    <label><input type="checkbox" class="agree"> Enable date</label>
+                    </div>
+                    <div class="col-sm-6" align="center">
+                    <label><input type="checkbox" class="agreetxt"> Enable filtres</label>
                     </div>
                          ';
                 }
