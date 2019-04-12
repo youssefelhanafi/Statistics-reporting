@@ -66,16 +66,12 @@ if (file_exists($excellib)) {
 
 
         for ($i=0; $i < sizeof($headers); $i++) { 
-            //$sheet->setCellValueByColumnAndRow($i+1, 1, $headers[$i]);
-            //$myxls->write_string($i+1, 1, $headers[$i]);
             $myxls->write_string(0, $i, $headers[$i]);
             
         }
         // END Headers
         for ($j=1; $j < sizeof($data)+2; $j++) { 
             for ($h=0; $h < sizeof($headers); $h++) { 
-                //$sheet->setCellValueByColumnAndRow($h+1, $j, $data[$j-2][$headers[$h]]);
-                //$myxls->write_string($h+1, $j, $data[$j-2][$headers[$h]]);
                 $myxls->write_string($j, $h, $data[$j-2][$headers[$h]]);
             }
             
