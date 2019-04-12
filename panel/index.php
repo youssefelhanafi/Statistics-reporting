@@ -103,28 +103,8 @@ include'./includes/header2.php';
                     Date fin formation:
                     <input type="date" name="fin"><br><br>
                     </div>
-                    
-                    <div class="col" align="center">
-                    Unité:
-                    <input type="text" name="unite"><br><br>
-                    </div>
-                    <div class="col" align="center">
-                    Direction:
-                    <input type="text" name="direction"><br><br>
-                    </div>
-                    <div class="col" align="center">
-                    Manager:
-                    <input type="text" name="manager"><br><br>
-                    </div>
-                    <div class="col" align="center">
-                    Direction(dga):
-                    <input type="text" name="dga"><br><br>
-                    </div>
-                    <div class="col-sm-6" align="center">
+                    <div class="col-sm-12" align="center">
                     <label><input type="checkbox" class="agree"> Enable date</label>
-                    </div>
-                    <div class="col-sm-6" align="center">
-                    <label><input type="checkbox" class="agreetxt"> Enable filtres</label>
                     </div>
                          ';
                 }
@@ -145,7 +125,7 @@ include'./includes/header2.php';
     }
     else{
         $selected_val = $_POST['activite'];
-        if(!isset($_POST['debut']) && !isset($_POST['fin']) && !isset($_POST['unite']) && !isset($_POST['direction']) && !isset($_POST['manager']) && !isset($_POST['dga'])){
+        if(!isset($_POST['debut']) && !isset($_POST['fin']) ){
             $sql0 = "SELECT distinct 
             cat.name AS 'CATEGORIE',c.fullname AS 'FORMATION', c.visible as 'VISIBILITE',
             CASE 
