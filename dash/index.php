@@ -47,6 +47,19 @@ $rowCount = $query->num_rows;
                             
         </div>
         <div class="row">
+        <script>
+            $(document).ready(function(){
+            $('form input[type="text"]').prop("disabled", true);
+            $(".agreetxt").click(function(){
+                    if($(this).prop("checked") == true){
+                        $('form input[type="text"]').prop("disabled", false);
+                    }
+                    else if($(this).prop("checked") == false){
+                        $('form input[type="text"]').prop("disabled", true);
+                    }
+                });
+            });
+        </script>
             <div class="col-sm-4" align="center">
                     Direction : 
                     <input type="text" name="debut"><br><br>
@@ -60,6 +73,9 @@ $rowCount = $query->num_rows;
                     <input type="text" class="agree">
                     </div>
                     <div class="col-sm-12" align="center">
+                    <div class="col-sm-12" align="center">
+                    <label><input type="checkbox" class="agreetxt"> Activer Filtres</label>
+                    </div>
                     <input type="submit" name="SubmitButton" class="btn btn-primary" value="Soumettre" /><br><br>
                 </div>
         </div>
@@ -380,14 +396,7 @@ if(is_nan($tauxechec )) $tauxechec = 0 ;
         <div class="col-sm-6" >
             
                 <div id="chartContainer1" style="height: 370px; width: 100%;"></div>
-                <?php 
-                        $a = 'a';
-                        $b = 'b';
-                        $c = 'c';
-                        $d = 'd';
-                        $e = 'e';
-                        $f = 'f';
-                ?>
+
         </div>
         <div class="col-sm-12" align="center">
             <form action="./export/xls.php" method="post">
