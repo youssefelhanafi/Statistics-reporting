@@ -21,6 +21,10 @@ if (file_exists($excellib)) {
 
         // Create connection
         $conn = mysqli_connect($servername, $username, $password, $database);
+
+
+
+        
         //end db connection
         //get data
         function GetHeaders($conn,$sql)

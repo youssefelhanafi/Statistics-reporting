@@ -1,6 +1,7 @@
 <?php
 include './config/dbConfig.php';
 include './includes/req.php';
+include './includes/tabfunction.php';
 
 //Fetch all the categorie data
 $sql = "SELECT id,name from mdl_course_categories order by name";
@@ -9,53 +10,7 @@ $query = $db->query($sql);
 //Count total number of rows
 $rowCount = $query->num_rows;
 
-//html table creator
-function table($result,$query) {
-    $result->fetch_array( MYSQLI_ASSOC );
-    echo '<form action="/moodle/blocks/filtered_reporting/panel/export/xls.php"  method="POST">';
-    echo '<table style="max-width:100%;
-    margin: auto;
-    border: 2px solid black;">';
-    tableHead( $result );
-    tableBody( $result );
-    echo '</table>';
-    echo '<br>';
-    echo '<div class="container"><div class="col-sm-12" align="center">';
-    echo '<input type="submit" name="SubmitButton" class="btn btn-success" value="Télécharger Excel" />';
-    echo '<input type="hidden" name="date" id="hiddenField" value="'.$query.'"/>';
-    echo '<br>';
-    echo '<a href="http://localhost/moodle/">Accueil<a/>';
-    echo "</div></div>";
-}
-
-function tableHead( $result ) {
-    echo '<thead style="max-width:100%;
-    margin: auto;
-    border: 2px solid black;">';
-    foreach ( $result as $x ) {
-    echo '<tr>';
-    foreach ( $x as $k => $y ) {
-        echo '<th>' . ucfirst( $k ) . '</th>';
-    }
-    echo '</tr>';
-    break;
-    }
-    echo '</thead>';
-}
-
-function tableBody( $result ) {
-    echo '<tbody>';
-    foreach ( $result as $x ) {
-    echo '<tr>';
-    foreach ( $x as $y ) {
-        echo '<td>' . $y . '</td>';
-    }
-    echo '</tr>';
-    }
-    echo '</tbody>';
-}
-
-include'./includes/header2.php';
+include './includes/header2.php';
 ?>
 <body>
   <div class="container">
@@ -118,6 +73,22 @@ include'./includes/header2.php';
                     <div class="col-sm-4" align="center">
                     <label><input type="checkbox" class="agree1"> Activer date recrutement</label>
                     </div>
+                    
+                    <div class="col-sm-4" align="center">
+                    Unité:
+                    <input id="filtre" type="text" name="unite"><br><br>
+                    </div>
+                    <div class="col-sm-4" align="center">
+                    Manager:
+                    <input id="filtre" type="text" name="manager"><br><br>
+                    </div>
+                    <div class="col-sm-4" align="center">
+                    dga:
+                    <input id="filtre" type="text" name="dga"><br><br>
+                    </div>
+                    <div class="col-sm-12" align="center">
+                    <label><input type="checkbox" class="agreetxt"> Activer Filtres</label>
+                    </div>
                          ';
                 }
                 ?>
@@ -147,12 +118,18 @@ include'./includes/header2.php';
                 //$date_inscription = strval(date('d/m/Y',$time));
                 list($query0,$sql0) = sql0v2($db,$selected_val,$time1,$time2);
             }
-            else {
+            else { // Date recrutement selected
                 $time1 = strtotime($_POST['debutf'].' 02:00');
                 $time2 = strtotime($_POST['finf'].' 02:00');
                 $time3 = strtotime($_POST['debutr'].' 02:00');
                 $time4 = strtotime($_POST['finr'].' 02:00');
                 list($query0,$sql0) = sql0v3($db,$selected_val,$time1,$time2,$time3,$time4);
+            }
+            if (isset($_POST['unite']) || isset($_POST['manager']) || isset($_POST['dga'])) {
+                $unite = htmlspecialchars($_POST['unite']);
+                $manager = htmlspecialchars($_POST['manager']);
+                $dga = htmlspecialchars($_POST['dga']);
+                list($query0,$sql0) = sql0v4($db,$selected_val,$time1,$time2,$time3,$time4,$unite,$manager,$dga) ;
             }
             
             }
@@ -160,9 +137,9 @@ include'./includes/header2.php';
         
         switch ($_GET['rapport']) {
             case '1':
-                $vartest = strval(table($query0,$sql0));
-                print $vartest;
-                //table($query0,$sql0);
+                /* $vartest = strval(table($query0,$sql0));
+                print $vartest; */
+                table($query0,$sql0);
                 break;
             
             case '2':
