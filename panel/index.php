@@ -12,7 +12,7 @@ $rowCount = $query->num_rows;
 //html table creator
 function table($result,$query) {
     $result->fetch_array( MYSQLI_ASSOC );
-    echo '<form action="/moodle/blocks/filtered_reporting/panel/export/xls.php"  method="POST">';
+    echo '<form action="/moodle352/blocks/filtered_reporting/panel/export/xls.php"  method="POST">';
     echo '<table style="max-width:100%;
     margin: auto;
     border: 2px solid black;">';
