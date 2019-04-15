@@ -11,7 +11,7 @@ if (file_exists($excellib)) {
         require_once($config);
         require_once($excellib);
 
-        $sql = strval($_POST['date']);
+        $sql = strval($_POST['query']);
 
         //db connection
         $servername = "localhost";

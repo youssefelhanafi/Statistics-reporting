@@ -66,11 +66,8 @@ $rowCount = $query->num_rows;
     </form>
 
     <?php
-/*if(isset($_POST['SubmitButton'])){ //check if form was submitted
-        $selected_val = $_POST['activite'];  // Storing Selected Value In Variable
-        //echo "You have selected :" .$selected_val;
-      }
-*/    if(!isset($_POST['SubmitButton'])){
+
+    if(!isset($_POST['SubmitButton'])){
         $selected_val = 'NULL';
         //header("Location: index.php"); /* Redirect browser */
 
@@ -383,10 +380,26 @@ if(is_nan($tauxechec )) $tauxechec = 0 ;
         <div class="col-sm-6" >
             
                 <div id="chartContainer1" style="height: 370px; width: 100%;"></div>
+                <?php 
+                        $a = 'a';
+                        $b = 'b';
+                        $c = 'c';
+                        $d = 'd';
+                        $e = 'e';
+                        $f = 'f';
+                ?>
         </div>
         <div class="col-sm-12" align="center">
-            
-                <input type="submit" name="SubmitButton" class="btn btn-success" value="Télécharger Excel" />
+            <form action="./export/xls.php" method="post">
+                <input type="hidden" name="realisation" id="hiddenField" value="<?php echo  $tauxrealisation ?>"/>
+                <input type="hidden" name="participation" id="hiddenField" value="<?php echo $tauxparticipation  ?>"/>
+                <input type="hidden" name="echec" id="hiddenField" value="<?php echo $tauxechec ?>"/>
+                <input type="hidden" name="valide" id="hiddenField" value="<?php echo $nbrtermine ?>"/>
+                <input type="hidden" name="nonvalide" id="hiddenField" value="<?php echo $nbrstatusencours ?>"/>
+                <input type="hidden" name="nonentame" id="hiddenField" value="<?php echo $nbrstatusjamais ?>"/>
+                <input type="submit" name="SubmitButton" class="btn btn-success" value="Télécharger Excel" /><br>
+                <a href="http://localhost/moodle/">Accueil<a/>
+            </form>
         </div>
         
     </div>

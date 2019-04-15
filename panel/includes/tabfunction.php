@@ -11,7 +11,7 @@ function table($result,$query) {
     echo '<br>';
     echo '<div class="container"><div class="col-sm-12" align="center">';
     echo '<input type="submit" name="SubmitButton" class="btn btn-success" value="Télécharger Excel" />';
-    echo '<input type="hidden" name="date" id="hiddenField" value="'.$query.'"/>';
+    echo '<input type="hidden" name="query" id="hiddenField" value="'.$query.'"/>';
     echo '<br>';
     echo '<a href="http://localhost/moodle/">Accueil<a/>';
     echo "</div></div>";
