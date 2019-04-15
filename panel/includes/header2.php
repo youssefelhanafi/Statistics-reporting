@@ -33,16 +33,28 @@
   <script type="text/javascript">
       // Enable/Disable date
       $(document).ready(function(){
-      $('form input[type="date"]').prop("disabled", true);
-      $(".agree").click(function(){
-              if($(this).prop("checked") == true){
-                  $('form input[type="date"]').prop("disabled", false);
-              }
-              else if($(this).prop("checked") == false){
-                  $('form input[type="date"]').prop("disabled", true);
-              }
-          });
-      });
+		$('form input[id="formation"]').prop("disabled", true);
+		$(".agree").click(function(){
+            if($(this).prop("checked") == true){
+                $('form input[id="formation"]').prop("disabled", false);
+            }
+            else if($(this).prop("checked") == false){
+                $('form input[id="formation"]').prop("disabled", true);
+            }
+        });
+    });
+    
+    $(document).ready(function(){
+		$('form input[id="recrutement"]').prop("disabled", true);
+		$(".agree1").click(function(){
+            if($(this).prop("checked") == true){
+                $('form input[id="recrutement"]').prop("disabled", false);
+            }
+            else if($(this).prop("checked") == false){
+                $('form input[id="recrutement"]').prop("disabled", true);
+            }
+        });
+    });
       // Enable/Disable filtres
       $(document).ready(function(){
       $('form input[type="text"]').prop("disabled", true);

@@ -12,7 +12,7 @@ $rowCount = $query->num_rows;
 //html table creator
 function table($result,$query) {
     $result->fetch_array( MYSQLI_ASSOC );
-    echo '<form action="/moodle352/blocks/filtered_reporting/panel/export/xls.php"  method="POST">';
+    echo '<form action="/moodle/blocks/filtered_reporting/panel/export/xls.php"  method="POST">';
     echo '<table style="max-width:100%;
     margin: auto;
     border: 2px solid black;">';
@@ -98,16 +98,26 @@ include'./includes/header2.php';
                     echo '
                     <div class="col-sm-4" align="center">
                     Date début formation:
-                    <input type="date" name="debut"><br><br>
+                    <input id="formation" type="date" name="debutf"><br><br>
                     </div>
                     <div class="col-sm-4" align="center">
                     Date fin formation:
-                    <input type="date" name="fin"><br><br>
+                    <input id="formation" type="date" name="finf"><br><br>
                     </div>
                     <div class="col-sm-4" align="center">
                     <label><input type="checkbox" class="agree"> Activer date formation</label>
                     </div>
-                    
+                    <div class="col-sm-4" align="center">
+                    Date début recrutement:
+                    <input id="recrutement" type="date" name="debutr"><br><br>
+                    </div>
+                    <div class="col-sm-4" align="center">
+                    Date fin recrutement:
+                    <input id="recrutement" type="date" name="finr"><br><br>
+                    </div>
+                    <div class="col-sm-4" align="center">
+                    <label><input type="checkbox" class="agree1"> Activer date recrutement</label>
+                    </div>
                          ';
                 }
                 ?>
@@ -122,23 +132,30 @@ include'./includes/header2.php';
   </div>
         <br><br>
         <?php
-    if(!isset($_POST['SubmitButton'])){
+    if(!isset($_POST['SubmitButton'])){  //No submit
         $selected_val = 'NULL';
     }
-    else{
+    else{ // Submitted
         $selected_val = $_POST['activite'];
-        if(!isset($_POST['debut']) && !isset($_POST['fin']) ){
+        if(!isset($_POST['debutf']) && !isset($_POST['finf']) ){ // No date selected
             list($query0,$sql0) = sql0v1($db,$selected_val);
             }
-        else{
-            
-            $time1 = strtotime($_POST['debut'].' 02:00');
-            $time2 = strtotime($_POST['fin'].' 02:00');
-            //$date_inscription = strval(date('d/m/Y',$time));
-            list($query0,$sql0) = sql0v2($db,$selected_val,$time1,$time2);
+        else{ // Date formation selected
+            if (!isset($_POST['debutr']) && !isset($_POST['finr'])) {
+                $time1 = strtotime($_POST['debutf'].' 02:00');
+                $time2 = strtotime($_POST['finf'].' 02:00');
+                //$date_inscription = strval(date('d/m/Y',$time));
+                list($query0,$sql0) = sql0v2($db,$selected_val,$time1,$time2);
             }
-
-
+            else {
+                $time1 = strtotime($_POST['debutf'].' 02:00');
+                $time2 = strtotime($_POST['finf'].' 02:00');
+                $time3 = strtotime($_POST['debutr'].' 02:00');
+                $time4 = strtotime($_POST['finr'].' 02:00');
+                list($query0,$sql0) = sql0v3($db,$selected_val,$time1,$time2,$time3,$time4);
+            }
+            
+            }
         list($query1,$sql1) = sql1($db);
         
         switch ($_GET['rapport']) {
@@ -152,7 +169,7 @@ include'./includes/header2.php';
                 table($query1,$sql1); 
                 break;
         }
-    } 
+        }    
     include './includes/footer2.php';
 ?>
         
