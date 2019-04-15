@@ -44,9 +44,24 @@ $rowCount = $query->num_rows;
                     </select>
                 </div>
 
-                <div class="col-sm-12" align="center">
+                            
+        </div>
+        <div class="row">
+            <div class="col-sm-4" align="center">
+                    Direction : 
+                    <input type="text" name="debut"><br><br>
+                    </div>
+                    <div class="col-sm-4" align="center">
+                    DGA :
+                    <input type="text" name="fin"><br><br>
+                    </div>
+                    <div class="col-sm-4" align="center">
+                        Unité : 
+                    <input type="text" class="agree">
+                    </div>
+                    <div class="col-sm-12" align="center">
                     <input type="submit" name="SubmitButton" class="btn btn-primary" value="Soumettre" /><br><br>
-                </div>            
+                </div>
         </div>
     </form>
 
@@ -368,6 +383,10 @@ if(is_nan($tauxechec )) $tauxechec = 0 ;
         <div class="col-sm-6" >
             
                 <div id="chartContainer1" style="height: 370px; width: 100%;"></div>
+        </div>
+        <div class="col-sm-12" align="center">
+            
+                <input type="submit" name="SubmitButton" class="btn btn-success" value="Télécharger Excel" />
         </div>
         
     </div>
