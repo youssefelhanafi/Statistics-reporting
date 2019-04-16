@@ -1,10 +1,12 @@
 <?php
 
 //require_once('/var/www/html/moodle/lib/excellib.class.php');
-$excellib = '/var/www/html/moodle/lib/excellib.class.php';
+//$excellib = '/var/www/html/moodle/lib/excellib.class.php';
+$excellib = '../../../../lib/excellib.class.php';
 if (file_exists($excellib)) {
 
-    $config = '/var/www/html/moodle/config.php';
+    //$config = '/var/www/html/moodle/config.php';
+    $config = '../../../../config.php';
     if (file_exists($config)){
 
         
@@ -92,3 +94,4 @@ if (file_exists($excellib)) {
 else{
     echo '0';
 }
+

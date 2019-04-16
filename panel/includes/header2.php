@@ -56,17 +56,53 @@
         });
     });
       // Enable/Disable filtres
-      $(document).ready(function(){
-      $('form input[type="text"]').prop("disabled", true);
-      $(".agreetxt").click(function(){
-              if($(this).prop("checked") == true){
-                  $('form input[type="text"]').prop("disabled", false);
-              }
-              else if($(this).prop("checked") == false){
-                  $('form input[type="text"]').prop("disabled", true);
-              }
-          });
-      });
+    $(document).ready(function(){
+    $('form input[id="filtreunite"]').prop("disabled", true);
+    $(".agreeunite").click(function(){
+            if($(this).prop("checked") == true){
+                $('form input[id="filtreunite"]').prop("disabled", false);
+            }
+            else if($(this).prop("checked") == false){
+                $('form input[id="filtreunite"]').prop("disabled", true);
+            }
+        });
+    });
+
+    $(document).ready(function(){
+    $('form input[id="filtremanager"]').prop("disabled", true);
+    $(".agreemanager").click(function(){
+            if($(this).prop("checked") == true){
+                $('form input[id="filtremanager"]').prop("disabled", false);
+            }
+            else if($(this).prop("checked") == false){
+                $('form input[id="filtremanager"]').prop("disabled", true);
+            }
+        });
+    });
+
+    $(document).ready(function(){
+    $('form input[id="filtredga"]').prop("disabled", true);
+    $(".agreedga").click(function(){
+            if($(this).prop("checked") == true){
+                $('form input[id="filtredga"]').prop("disabled", false);
+            }
+            else if($(this).prop("checked") == false){
+                $('form input[id="filtredga"]').prop("disabled", true);
+            }
+        });
+    });
+
+    $(document).ready(function(){
+    $('form input[id="filtredirection"]').prop("disabled", true);
+    $(".agreedirection").click(function(){
+            if($(this).prop("checked") == true){
+                $('form input[id="filtredirection"]').prop("disabled", false);
+            }
+            else if($(this).prop("checked") == false){
+                $('form input[id="filtredirection"]').prop("disabled", true);
+            }
+        });
+    });
   </script>
 
 

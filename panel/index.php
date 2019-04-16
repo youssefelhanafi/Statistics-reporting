@@ -73,22 +73,59 @@ include './includes/header2.php';
                     <div class="col-sm-4" align="center">
                     <label><input type="checkbox" class="agree1"> Activer date recrutement</label>
                     </div>
+
+
+
+
+
+
+
                     
-                    <div class="col-sm-4" align="center">
+                    <div class="col-sm-6" align="center">
                     Unité:
-                    <input id="filtre" type="text" name="unite"><br><br>
+                    <input id="filtreunite" type="text" name="unite"><br><br>
                     </div>
-                    <div class="col-sm-4" align="center">
+                    <div class="col-sm-6" align="center">
+                    <label><input type="checkbox" class="agreeunite"> Activer filtre unité</label>
+                    </div>
+
+                    <div class="col-sm-6" align="center">
                     Manager:
-                    <input id="filtre" type="text" name="manager"><br><br>
+                    <input id="filtremanager" type="text" name="manager"><br><br>
                     </div>
-                    <div class="col-sm-4" align="center">
+                    <div class="col-sm-6" align="center">
+                    <label><input type="checkbox" class="agreemanager"> Activer filtre manager</label>
+                    </div>
+
+                    <div class="col-sm-6" align="center">
                     dga:
-                    <input id="filtre" type="text" name="dga"><br><br>
+                    <input id="filtredga" type="text" name="dga"><br><br>
                     </div>
-                    <div class="col-sm-12" align="center">
-                    <label><input type="checkbox" class="agreetxt"> Activer Filtres</label>
+                    <div class="col-sm-6" align="center">
+                    <label><input type="checkbox" class="agreedga"> Activer filtre dga</label>
                     </div>
+
+                    <div class="col-sm-6" align="center">
+                    direction:
+                    <input id="filtredirection" type="text" name="direction"><br><br>
+                    </div>
+                    <div class="col-sm-6" align="center">
+                    <label><input type="checkbox" class="agreedirection"> Activer filtre direction</label>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                          ';
                 }
                 ?>
@@ -108,38 +145,87 @@ include './includes/header2.php';
     }
     else{ // Submitted
         $selected_val = $_POST['activite'];
-        if(!isset($_POST['debutf']) && !isset($_POST['finf']) ){ // No date selected
+        if(!isset($_POST['debutf']) && !isset($_POST['finf']) && !isset($_POST['debutr']) && !isset($_POST['finr'])
+        && !isset($_POST['unite']) && !isset($_POST['manager']) && !isset($_POST['dga']) && !isset($_POST['direction']))
+        { // Nothing selected
             list($query0,$sql0) = sql0v1($db,$selected_val);
-            }
-        else{ // Date formation selected
-            if (!isset($_POST['debutr']) && !isset($_POST['finr'])) {
-                $time1 = strtotime($_POST['debutf'].' 02:00');
-                $time2 = strtotime($_POST['finf'].' 02:00');
-                //$date_inscription = strval(date('d/m/Y',$time));
-                list($query0,$sql0) = sql0v2($db,$selected_val,$time1,$time2);
-            }
-            else { // Date recrutement selected
-                $time1 = strtotime($_POST['debutf'].' 02:00');
-                $time2 = strtotime($_POST['finf'].' 02:00');
-                $time3 = strtotime($_POST['debutr'].' 02:00');
-                $time4 = strtotime($_POST['finr'].' 02:00');
-                list($query0,$sql0) = sql0v3($db,$selected_val,$time1,$time2,$time3,$time4);
-            }
-            if (isset($_POST['unite']) || isset($_POST['manager']) || isset($_POST['dga'])) {
-                $unite = htmlspecialchars($_POST['unite']);
-                $manager = htmlspecialchars($_POST['manager']);
-                $dga = htmlspecialchars($_POST['dga']);
-                list($query0,$sql0) = sql0v4($db,$selected_val,$time1,$time2,$time3,$time4,$unite,$manager,$dga) ;
-            }
-            
-            }
+        }
+        if(isset($_POST['debutf']) && isset($_POST['finf']) )
+        { // Date formation
+            $time1 = strtotime($_POST['debutf'].' 02:00');
+            $time2 = strtotime($_POST['finf'].' 02:00');
+            //$date_inscription = strval(date('d/m/Y',$time));
+            list($query0,$sql0) = sql0v2($db,$selected_val,$time1,$time2);
+        }
+        if(isset($_POST['debutr']) && isset($_POST['finr']) )
+        { // Date recrutement
+            $time3 = strtotime($_POST['debutr'].' 02:00');
+            $time4 = strtotime($_POST['finr'].' 02:00');
+            //$date_inscription = strval(date('d/m/Y',$time));
+            list($query0,$sql0) = sql0dr($db,$selected_val,$time3,$time4);
+        }
+        if(isset($_POST['debutf']) && isset($_POST['finf']) && isset($_POST['debutr']) && isset($_POST['finr']))
+        { // Date formation && Date recrutement
+            $time1 = strtotime($_POST['debutf'].' 02:00');
+            $time2 = strtotime($_POST['finf'].' 02:00');
+            $time3 = strtotime($_POST['debutr'].' 02:00');
+            $time4 = strtotime($_POST['finr'].' 02:00');
+            list($query0,$sql0) = sql0v3($db,$selected_val,$time1,$time2,$time3,$time4);   
+        }
+        if(isset($_POST['unite']))
+        {// Unité
+            $unite = htmlspecialchars($_POST['unite']);
+            list($query0,$sql0) = sql0unite($db,$selected_val,$unite); 
+        }
+        if(isset($_POST['manager']))
+        {// Manager
+            $manager = htmlspecialchars($_POST['manager']);
+            list($query0,$sql0) = sql0manager($db,$selected_val,$manager); 
+        }
+        if (isset($_POST['dga']))
+        { // Dga
+            $dga = htmlspecialchars($_POST['dga']);
+            list($query0,$sql0) = sql0dga($db,$selected_val,$dga); 
+        }
+        if (isset($_POST['direction'])) 
+        { // Direction
+            $direction = htmlspecialchars($_POST['direction']);
+            list($query0,$sql0) = sql0direction($db,$selected_val,$direction);
+        }
+        if (isset($_POST['unite']) && isset($_POST['manager']) && isset($_POST['dga']) && isset($_POST['direction'])) 
+        { // All filters
+            $unite = htmlspecialchars($_POST['unite']);
+            $manager = htmlspecialchars($_POST['manager']);
+            $dga = htmlspecialchars($_POST['dga']);
+            $direction = htmlspecialchars($_POST['direction']);
+            list($query0,$sql0) = sql0filters($db,$selected_val,$unite,$manager,$dga,$direction);
+        }
+        if(isset($_POST['debutf']) && isset($_POST['finf']) && isset($_POST['debutr']) && isset($_POST['finr'])
+        && isset($_POST['unite']) && isset($_POST['manager']) && isset($_POST['dga']) && isset($_POST['direction']))
+        { // ALL
+            $time1 = strtotime($_POST['debutf'].' 02:00');
+            $time2 = strtotime($_POST['finf'].' 02:00');
+            $time3 = strtotime($_POST['debutr'].' 02:00');
+            $time4 = strtotime($_POST['finr'].' 02:00');
+            $unite = htmlspecialchars($_POST['unite']);
+            $manager = htmlspecialchars($_POST['manager']);
+            $dga = htmlspecialchars($_POST['dga']);
+            $direction = htmlspecialchars($_POST['direction']);
+            list($query0,$sql0) = sql0v4($db,$selected_val,$time1,$time2,$time3,$time4,$unite,$manager,$dga,$direction);
+        }
+
+
         list($query1,$sql1) = sql1($db);
         
         switch ($_GET['rapport']) {
             case '1':
-                /* $vartest = strval(table($query0,$sql0));
-                print $vartest; */
+                //$vartest = strval(table($query0,$sql0));
+                //print $vartest;
                 table($query0,$sql0);
+                //print_r($query0);
+                //echo '<pre>';
+                //echo $sql0;
+                //echo '</pre>';
                 break;
             
             case '2':
@@ -147,6 +233,7 @@ include './includes/header2.php';
                 break;
         }
         }    
+        
     include './includes/footer2.php';
 ?>
         
