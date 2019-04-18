@@ -477,6 +477,13 @@ $encoded4=htmlentities($arr4);
         </div>
         <div class="col-sm-12" align="center">
             <form action="./export/xls.php" method="post">
+
+                <input type="hidden" name="realisation" id="hiddenField" value="<?php echo  $tauxrealisation ?>"/>
+                <input type="hidden" name="participation" id="hiddenField" value="<?php echo $tauxparticipation  ?>"/>
+                <input type="hidden" name="echec" id="hiddenField" value="<?php echo $tauxechec ?>"/>
+                <input type="hidden" name="valide" id="hiddenField" value="<?php echo $nbrtermine ?>"/>
+                <input type="hidden" name="nonvalide" id="hiddenField" value="<?php echo $nbrstatusencours ?>"/>
+                <input type="hidden" name="nonentame" id="hiddenField" value="<?php echo $nbrstatusjamais ?>"/>
                 
 
                 <input type="hidden" name="prenomvalide" id="hiddenField" value="<?php print_r($prenomvalide)  ?>"/>

@@ -20,6 +20,14 @@ if (file_exists($excellib)) {
             $string4 = $_POST['nomnonvalide'];
             $string5 = $_POST['prenomentame'];
             $string6 = $_POST['nomentame'];
+
+
+            $tauxrealisation = $_POST['realisation'];
+            $tauxparticipation = $_POST['participation']; 
+            $tauxechec = $_POST['echec'];
+            $nbrtermine = $_POST['valide'];
+            $nbrstatusencours = $_POST['nonvalide']; 
+            $nbrstatusjamais = $_POST['nonentame'];
         }
         else {
             echo '0';
@@ -98,12 +106,26 @@ if (file_exists($excellib)) {
             $myxls->write_string(1, $i, $tab[$i]);
         } */
 
-        $myxls->write_string(0, 0, 'Prénom des collaborateur ayant validé la formation');
-        $myxls->write_string(0, 1, 'Nom des collaborateur ayant validé la formation');
-        $myxls->write_string(0, 2, 'Prénom des collaborateur n\'ayant pas validé la formation');
-        $myxls->write_string(0, 3, 'Nom des collaborateur n\'ayant pas validé la formation');
-        $myxls->write_string(0, 4, 'Prénom des collaborateur n\'ayant pas encore entamé la formation');
-        $myxls->write_string(0, 5, 'Nom des collaborateur n\'ayant pas encore entamé la formation');
+        $myxls->write_string(0, 0, 'Prénom(formation validé)');
+        $myxls->write_string(0, 1, 'Nom(formation validé)');
+        $myxls->write_string(0, 2, 'Prénom(formation non validé)');
+        $myxls->write_string(0, 3, 'Nom(formation non validé)');
+        $myxls->write_string(0, 4, 'Prénom(formation non entamé)');
+        $myxls->write_string(0, 5, 'Nom(formation non entamé)');
+
+        $myxls->write_string(2, 9, 'Taux de réalisation');
+        $myxls->write_string(3, 9, $tauxrealisation.'%');
+        $myxls->write_string(2, 10, 'Taux de participation');
+        $myxls->write_string(3, 10, $tauxparticipation.'%');
+        $myxls->write_string(2, 11, 'Taux d\'échec');
+        $myxls->write_string(3, 11, $tauxechec.'%');
+        $myxls->write_string(4, 9, 'Collaborateur ayant validé la formation');
+        $myxls->write_string(5, 9, $nbrtermine);
+        $myxls->write_string(4, 10, 'Collaborateurs n\'ayant pas validé la formation');
+        $myxls->write_string(5, 10, $nbrstatusencours);
+        $myxls->write_string(4, 11, 'Collaborateurs n\'ayant pas encore entamé a formation');
+        $myxls->write_string(5, 11, $nbrstatusjamais);
+
 
         for ($i=1; $i <= sizeof($arr1); $i++) { 
             $myxls->write_string($i, 0, $arr1[$i-1]);
