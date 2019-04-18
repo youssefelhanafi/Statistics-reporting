@@ -60,21 +60,9 @@ $rowCount = $query->num_rows;
                 });
             });
         </script>
-            <div class="col-sm-4" align="center">
-                    Direction : 
-                    <input type="text" name="debut"><br><br>
-                    </div>
-                    <div class="col-sm-4" align="center">
-                    DGA :
-                    <input type="text" name="fin"><br><br>
-                    </div>
-                    <div class="col-sm-4" align="center">
-                        Unité : 
-                    <input type="text" class="agree">
-                    </div>
+            
                     <div class="col-sm-12" align="center">
                     <div class="col-sm-12" align="center">
-                    <label><input type="checkbox" class="agreetxt"> Activer Filtres</label>
                     </div>
                     <input type="submit" name="SubmitButton" class="btn btn-primary" value="Soumettre" /><br><br>
                 </div>
@@ -338,12 +326,7 @@ $encoded4=htmlentities($arr4);
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div>Taux de participation</div>
-                                <div class="huge"><?php echo $tauxparticipation;
-                                echo '<pre>';
-                                //print_r($prenomvalide);
-                                echo $encoded1;
-                                echo '<pre>';
-                                 ?> %</div>
+                                <div class="huge"><?php echo $tauxparticipation;?> %</div>
                                 
                             </div>
                         </div>
@@ -361,11 +344,7 @@ $encoded4=htmlentities($arr4);
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div>Taux d'échec</div>
-                                <div class="huge"><?php echo $tauxechec;
-                                echo '<pre>';
-                                //print_r($nomvalide);
-                                echo $encoded2;
-                                echo '<pre>'; ?> %</div>
+                                <div class="huge"><?php echo $tauxechec;?> %</div>
                                 
                             </div>
                         </div>
@@ -384,11 +363,7 @@ $encoded4=htmlentities($arr4);
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div>Collaborateur ayant validé la formation</div>
-                                <div class="huge"><?php echo $nbrtermine;
-                                echo '<pre>';
-                                //print_r($prenomnonvalide);
-                                echo $encoded3;
-                                echo '<pre>'; ?></div>
+                                <div class="huge"><?php echo $nbrtermine;?></div>
                                 
                             </div>
                         </div>
@@ -406,11 +381,7 @@ $encoded4=htmlentities($arr4);
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div>Collaborateurs n'ayant pas validé la formation</div>
-                                <div class="huge"><?php echo $nbrstatusencours;
-                                echo '<pre>';
-                                //print_r($nomnonvalide);
-                                echo $encoded4;
-                                echo '<pre>'; ?></div>
+                                <div class="huge"><?php echo $nbrstatusencours;?></div>
                                 
                             </div>
                         </div>
