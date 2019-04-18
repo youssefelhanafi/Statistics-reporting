@@ -94,7 +94,7 @@ $rowCount = $query->num_rows;
 ?>
 <?php
 // Custom queries 
-// Query 1
+// Query 1 Collaborateur ayant validé la formation
 $query1 = "SELECT 
 count(distinct u.id) as nbr
 from mdl_course c
@@ -119,7 +119,29 @@ if (mysqli_num_rows($result1) > 0) {
 } else {
     $nbrtermine = 0;
 }
-
+$query11 = "SELECT 
+u.id as id,
+u.firstname,
+u.lastname
+from mdl_course c
+JOIN mdl_context AS ctx ON c.id = ctx.instanceid
+JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
+LEFT JOIN mdl_enrol AS er ON er.courseid = c.id
+JOIN mdl_user AS u ON u.id = ra.userid
+LEFT JOIN mdl_user_enrolments AS enr ON enr.enrolid = er.id
+JOIN mdl_grade_grades AS gg ON gg.userid = u.id
+JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
+JOIN mdl_course_categories AS cc ON cc.id = c.category
+where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) and gi.id = ".$selected_val."
+and ROUND(gg.finalgrade,2) > 0 AND   FROM_UNIXTIME(gg.timemodified,'%d/%m/%Y') is not NULL
+";
+$result11 = mysqli_query($db,$query11);
+$prenomvalide = array();
+$nomvalide = array();
+while ($row11 = mysqli_fetch_assoc($result11)) {
+    array_push($prenomvalide,$row11['firstname']);
+    array_push($nomvalide,$row11['lastname']);
+}
 
 // Query 2
 $query2 = "SELECT 
@@ -145,9 +167,12 @@ if (mysqli_num_rows($result2) > 0) {
     echo "0 results";
 }
 
-// Query 3
+// Query 3 Collaborateurs n'ayant pas validé la formation
 $query3 = "SELECT 
-count(*) as nbrencours 
+count(*) as nbrencours,
+u.id as id,
+u.firstname,
+u.lastname
 from mdl_course c
 JOIN mdl_context AS ctx ON c.id = ctx.instanceid
 JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
@@ -169,9 +194,35 @@ if (mysqli_num_rows($result3) > 0) {
     echo "0 results";
 }
 
-// Query 4
+$query33 = "SELECT 
+u.id as id,
+u.firstname,
+u.lastname
+from mdl_course c
+JOIN mdl_context AS ctx ON c.id = ctx.instanceid
+JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
+LEFT JOIN mdl_enrol AS er ON er.courseid = c.id
+JOIN mdl_user AS u ON u.id = ra.userid
+LEFT JOIN mdl_user_enrolments AS enr ON enr.enrolid = er.id
+JOIN mdl_grade_grades AS gg ON gg.userid = u.id
+JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
+JOIN mdl_course_categories AS cc ON cc.id = c.category
+where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) and gi.id = ".$selected_val." and ROUND(gg.finalgrade,2) is null
+";
+$result33 = mysqli_query($db,$query33);
+$prenomnonvalide = array();
+$nomnonvalide = array();
+while ($row33 = mysqli_fetch_assoc($result33)) {
+    array_push($prenomnonvalide,$row33['firstname']);
+    array_push($nomnonvalide,$row33['lastname']);
+}
+
+// Query 4 Collaborateurs n'ayant pas encore entamé a formation
 $query4 = "SELECT 
-count(*) as nbrjamais
+count(*) as nbrjamais,
+u.id as id,
+u.firstname,
+u.lastname
 from mdl_course c
 JOIN mdl_context AS ctx ON c.id = ctx.instanceid
 JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
@@ -195,6 +246,31 @@ if (mysqli_num_rows($result4) > 0) {
     echo "0 results";
 }
 
+$query44 = "SELECT 
+u.id as id,
+u.firstname,
+u.lastname
+from mdl_course c
+JOIN mdl_context AS ctx ON c.id = ctx.instanceid
+JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
+LEFT JOIN mdl_enrol AS er ON er.courseid = c.id
+JOIN mdl_user AS u ON u.id = ra.userid
+LEFT JOIN mdl_user_enrolments AS enr ON enr.enrolid = er.id
+JOIN mdl_grade_grades AS gg ON gg.userid = u.id
+JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
+JOIN mdl_course_categories AS cc ON cc.id = c.category
+where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) 
+and gi.id = ".$selected_val." and (select count(*) from mdl_quiz_attempts A,mdl_quiz B where A.userid = u.id and B.course = c.id and A.quiz = B.id)=0
+and ROUND(gg.finalgrade,2) is null
+";
+$result44 = mysqli_query($db,$query44);
+$prenomentame = array();
+$nomentame = array();
+while ($row44 = mysqli_fetch_assoc($result44)) {
+    array_push($prenomentame,$row44['firstname']);
+    array_push($nomentame,$row44['lastname']);
+}
+
 //END Custom queries
 
 // Custom Calcu
@@ -212,6 +288,19 @@ else{
 if(is_nan($tauxrealisation)) $tauxrealisation = 0 ;
 if(is_nan($tauxparticipation)) $tauxparticipation = 0 ;
 if(is_nan($tauxechec )) $tauxechec = 0 ;
+
+
+
+
+
+$arr1 = serialize($prenomvalide);
+$encoded1=htmlentities($arr1);
+$arr2 = serialize($nomvalide);
+$encoded2=htmlentities($arr2);
+$arr3 = serialize($prenomnonvalide);
+$encoded3=htmlentities($arr3);
+$arr4 = serialize($nomnonvalide);
+$encoded4=htmlentities($arr4);
 
 
 
@@ -249,7 +338,12 @@ if(is_nan($tauxechec )) $tauxechec = 0 ;
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div>Taux de participation</div>
-                                <div class="huge"><?php echo $tauxparticipation; ?> %</div>
+                                <div class="huge"><?php echo $tauxparticipation;
+                                echo '<pre>';
+                                //print_r($prenomvalide);
+                                echo $encoded1;
+                                echo '<pre>';
+                                 ?> %</div>
                                 
                             </div>
                         </div>
@@ -267,7 +361,11 @@ if(is_nan($tauxechec )) $tauxechec = 0 ;
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div>Taux d'échec</div>
-                                <div class="huge"><?php echo $tauxechec; ?> %</div>
+                                <div class="huge"><?php echo $tauxechec;
+                                echo '<pre>';
+                                //print_r($nomvalide);
+                                echo $encoded2;
+                                echo '<pre>'; ?> %</div>
                                 
                             </div>
                         </div>
@@ -286,7 +384,11 @@ if(is_nan($tauxechec )) $tauxechec = 0 ;
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div>Collaborateur ayant validé la formation</div>
-                                <div class="huge"><?php echo $nbrtermine; ?></div>
+                                <div class="huge"><?php echo $nbrtermine;
+                                echo '<pre>';
+                                //print_r($prenomnonvalide);
+                                echo $encoded3;
+                                echo '<pre>'; ?></div>
                                 
                             </div>
                         </div>
@@ -304,7 +406,11 @@ if(is_nan($tauxechec )) $tauxechec = 0 ;
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div>Collaborateurs n'ayant pas validé la formation</div>
-                                <div class="huge"><?php echo $nbrstatusencours; ?></div>
+                                <div class="huge"><?php echo $nbrstatusencours;
+                                echo '<pre>';
+                                //print_r($nomnonvalide);
+                                echo $encoded4;
+                                echo '<pre>'; ?></div>
                                 
                             </div>
                         </div>
@@ -378,7 +484,7 @@ if(is_nan($tauxechec )) $tauxechec = 0 ;
                 }],
                 data: [{
                     type: "pie",
-                    yValueFormatString: "#,##0.00\"%\"",
+                    yValueFormatString: "#,##0\"\"",
                     indexLabel: "{label} ({y})",
                     dataPoints: <?php echo json_encode($dataPoints1, JSON_NUMERIC_CHECK); ?>
                 }]
@@ -400,12 +506,17 @@ if(is_nan($tauxechec )) $tauxechec = 0 ;
         </div>
         <div class="col-sm-12" align="center">
             <form action="./export/xls.php" method="post">
-                <input type="hidden" name="realisation" id="hiddenField" value="<?php echo  $tauxrealisation ?>"/>
-                <input type="hidden" name="participation" id="hiddenField" value="<?php echo $tauxparticipation  ?>"/>
-                <input type="hidden" name="echec" id="hiddenField" value="<?php echo $tauxechec ?>"/>
-                <input type="hidden" name="valide" id="hiddenField" value="<?php echo $nbrtermine ?>"/>
-                <input type="hidden" name="nonvalide" id="hiddenField" value="<?php echo $nbrstatusencours ?>"/>
-                <input type="hidden" name="nonentame" id="hiddenField" value="<?php echo $nbrstatusjamais ?>"/>
+                
+
+                <input type="hidden" name="prenomvalide" id="hiddenField" value="<?php print_r($prenomvalide)  ?>"/>
+                <input type="hidden" name="nomvalide" id="hiddenField" value="<?php print_r($nomvalide) ?>"/>
+                <input type="hidden" name="prenomnonvalide" id="hiddenField" value="<?php print_r($prenomnonvalide)  ?>"/>
+                <input type="hidden" name="nomnonvalide" id="hiddenField" value="<?php print_r($nomnonvalide) ?>"/>
+                <input type="hidden" name="prenomentame" id="hiddenField" value="<?php print_r($prenomentame)  ?>"/>
+                <input type="hidden" name="nomentame" id="hiddenField" value="<?php print_r($nomentame) ?>"/>
+
+
+
                 <input type="submit" name="SubmitButton" class="btn btn-success" value="Télécharger Excel" /><br>
                 <a href="http://localhost/moodle/">Accueil<a/>
             </form>
