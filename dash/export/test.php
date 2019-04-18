@@ -17,12 +17,14 @@ if (isset($_POST['prenomvalide']) && isset($_POST['nomvalide']) && isset($_POST[
 
     $arr1 = array();
     $s1 = explode(" ",$string1);
-    for ($i=6; $i < sizeof($s1) ; $i+=3) { 
+    for ($i=6; $i < sizeof($s1) ; $i+=6) { 
         //echo $s[$i];
         //echo '<br>';
         array_push($arr1,$s1[$i]);
     }
+    echo '<pre>';
     print_r($arr1);
+    echo '</pre>';
     //print_r(array_filter($arr));
     /* for ($i=0; $i < sizeof($arr1); $i++) {
         echo '<pre>';
@@ -37,7 +39,7 @@ if (isset($_POST['prenomvalide']) && isset($_POST['nomvalide']) && isset($_POST[
         //echo '<br>';
         array_push($arr2,$s2[$i]);
     }
-    print_r($arr2);
+    //print_r($arr2);
     /* for ($i=0; $i < sizeof($arr2); $i++) {
         echo '<pre>';
         echo $arr2[$i];

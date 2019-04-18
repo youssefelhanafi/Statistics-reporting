@@ -29,7 +29,7 @@ if (file_exists($excellib)) {
 
         $arr1 = array();
         $s1 = explode(" ",$string1);
-        for ($i=6; $i < sizeof($s1) ; $i+=3) { 
+        for ($i=6; $i < sizeof($s1) ; $i+=6) { 
             //echo $s[$i];
             //echo '<br>';
             array_push($arr1,$s1[$i]);
@@ -37,7 +37,7 @@ if (file_exists($excellib)) {
         
         $arr2 = array();
         $s2 = explode(" ",$string2);
-        for ($i=6; $i < sizeof($s2) ; $i+=3) { 
+        for ($i=6; $i < sizeof($s2) ; $i+=6) { 
             //echo $s[$i];
             //echo '<br>';
             array_push($arr2,$s2[$i]);
@@ -45,7 +45,7 @@ if (file_exists($excellib)) {
 
         $arr3 = array();
         $s3 = explode(" ",$string3);
-        for ($i=6; $i < sizeof($s3) ; $i+=3) { 
+        for ($i=6; $i < sizeof($s3) ; $i+=6) { 
             //echo $s[$i];
             //echo '<br>';
             array_push($arr3,$s3[$i]);
@@ -53,7 +53,7 @@ if (file_exists($excellib)) {
         
         $arr4 = array();
         $s4 = explode(" ",$string4);
-        for ($i=6; $i < sizeof($s4) ; $i+=4) { 
+        for ($i=6; $i < sizeof($s4) ; $i+=6) { 
             //echo $s[$i];
             //echo '<br>';
             array_push($arr4,$s4[$i]);
@@ -61,7 +61,7 @@ if (file_exists($excellib)) {
         
         $arr5 = array();
         $s5 = explode(" ",$string5);
-        for ($i=6; $i < sizeof($s5) ; $i+=5) { 
+        for ($i=6; $i < sizeof($s5) ; $i+=6) { 
             //echo $s[$i];
             //echo '<br>';
             array_push($arr5,$s5[$i]);
