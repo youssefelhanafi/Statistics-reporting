@@ -307,7 +307,8 @@ if ($nbrinvite == 0) {
 else{
     $tauxrealisation = round($nbrtermine / ($nbrinvite /100), 2) ;
     $tauxparticipation = round(($nbrtermine +$nbrstatusencours)  / $nbrinvite , 2) * 100 ;
-    $tauxechec = round($nbrstatusencours/$nbrinvite,2) * 100  ;
+    //$tauxechec = round($nbrstatusencours/$nbrinvite,2) * 100  ;
+    $tauxechec = $tauxparticipation - $tauxrealisation;
 }
 
 if(is_nan($tauxrealisation)) $tauxrealisation = 0 ;
