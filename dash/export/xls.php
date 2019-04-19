@@ -42,6 +42,11 @@ if (file_exists($excellib)) {
             //echo '<br>';
             array_push($arr1,$s1[$i]);
         }
+        foreach ($arr1 as $key => $value) {
+            if (!preg_match('/^[a-zA-Z]+/', $value)) {
+                unset($arr1[$key]);
+            }
+        }
         
         $arr2 = array();
         $s2 = explode(" ",$string2);
@@ -49,6 +54,11 @@ if (file_exists($excellib)) {
             //echo $s[$i];
             //echo '<br>';
             array_push($arr2,$s2[$i]);
+        }
+        foreach ($arr2 as $key => $value) {
+            if (!preg_match('/^[a-zA-Z]+/', $value)) {
+                unset($arr2[$key]);
+            }
         }
 
         $arr3 = array();
@@ -58,6 +68,11 @@ if (file_exists($excellib)) {
             //echo '<br>';
             array_push($arr3,$s3[$i]);
         }
+        foreach ($arr3 as $key => $value) {
+            if (!preg_match('/^[a-zA-Z]+/', $value)) {
+                unset($arr3[$key]);
+            }
+        }
         
         $arr4 = array();
         $s4 = explode(" ",$string4);
@@ -65,6 +80,11 @@ if (file_exists($excellib)) {
             //echo $s[$i];
             //echo '<br>';
             array_push($arr4,$s4[$i]);
+        }
+        foreach ($arr4 as $key => $value) {
+            if (!preg_match('/^[a-zA-Z]+/', $value)) {
+                unset($arr4[$key]);
+            }
         }
         
         $arr5 = array();
@@ -74,6 +94,11 @@ if (file_exists($excellib)) {
             //echo '<br>';
             array_push($arr5,$s5[$i]);
         }
+        foreach ($arr5 as $key => $value) {
+            if (!preg_match('/^[a-zA-Z]+/', $value)) {
+                unset($arr5[$key]);
+            }
+        }
 
         $arr6 = array();
         $s6 = explode(" ",$string6);
@@ -81,6 +106,11 @@ if (file_exists($excellib)) {
             //echo $s[$i];
             //echo '<br>';
             array_push($arr6,$s6[$i]);
+        }
+        foreach ($arr6 as $key => $value) {
+            if (!preg_match('/^[a-zA-Z]+/', $value)) {
+                unset($arr6[$key]);
+            }
         }
 
         //end get data
@@ -105,8 +135,8 @@ if (file_exists($excellib)) {
         for ($i=0; $i < sizeof($tab); $i++) { 
             $myxls->write_string(1, $i, $tab[$i]);
         } */
-
-        $myxls->write_string(0, 0, 'Prénom(formation validé)');
+        //$format = array('font'=>array('size'=>10, 'name'=>'Arial'));
+        $myxls->write_string(0, 0, 'Prénom(formation validé)',$format = array('font'=>array('size'=>10, 'name'=>'Arial')));
         $myxls->write_string(0, 1, 'Nom(formation validé)');
         $myxls->write_string(0, 2, 'Prénom(formation non validé)');
         $myxls->write_string(0, 3, 'Nom(formation non validé)');

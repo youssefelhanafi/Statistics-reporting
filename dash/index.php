@@ -299,62 +299,67 @@ $encoded4=htmlentities($arr4);
     
     <!-- /.row -->
     <div class="row">
-        <div class="col-sm-4">
-                <div class="panel panel-green">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fa fa-tasks fa-5x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div>Taux de réalisation</div>
-                                <div class="huge"><?php echo $tauxrealisation; ?> %</div>
-                                
+        <div class="col-sm-6">
+            <div class="col">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-tasks fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div>Taux de réalisation</div>
+                                    <div class="huge"><?php echo $tauxrealisation; ?> %</div>
+                                    
+                                </div>
                             </div>
                         </div>
+                        
                     </div>
-                    
+            </div>
+
+                <div class="col">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-tasks fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div>Taux de participation</div>
+                                    <div class="huge"><?php echo $tauxparticipation;?> %</div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-tasks fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div>Taux d'échec</div>
+                                    <div class="huge"><?php echo $tauxechec;?> %</div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
                 </div>
         </div>
+        <div class="col-sm-6">
+        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+        </div>
 
-            <div class="col-sm-4">
-                <div class="panel panel-green">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fa fa-tasks fa-5x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div>Taux de participation</div>
-                                <div class="huge"><?php echo $tauxparticipation;?> %</div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-
-            <div class="col-sm-4">
-                <div class="panel panel-green">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fa fa-tasks fa-5x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div>Taux d'échec</div>
-                                <div class="huge"><?php echo $tauxechec;?> %</div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-
-
-            <div class="col-sm-4">
+        <div class="col-sm-6">
+            <div class="col">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <div class="row">
@@ -372,7 +377,7 @@ $encoded4=htmlentities($arr4);
                 </div>
             </div>
 
-            <div class="col-sm-4">
+            <div class="col">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <div class="row">
@@ -390,7 +395,7 @@ $encoded4=htmlentities($arr4);
                 </div>
             </div>
 
-            <div class="col-sm-4">
+            <div class="col">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <div class="row">
@@ -407,8 +412,17 @@ $encoded4=htmlentities($arr4);
         
                 </div>
             </div>
-            
+        </div>  
+        <div class="col-sm-6">
+        <div id="chartContainer1" style="height: 370px; width: 100%;"></div>
+        </div>
+
+
+
     </div>
+
+
+
     <div class="row">
 
         <div class="col-sm-6">
@@ -465,15 +479,14 @@ $encoded4=htmlentities($arr4);
             }
             </script>
         
-            <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+            
             
             
         </div>
 
         <div class="col-sm-6" >
             
-                <div id="chartContainer1" style="height: 370px; width: 100%;"></div>
-
+                
         </div>
         <div class="col-sm-12" align="center">
             <form action="./export/xls.php" method="post">

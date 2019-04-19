@@ -8,6 +8,8 @@ if (isset($_POST['prenomvalide']) && isset($_POST['nomvalide']) && isset($_POST[
     //print_r($_POST['prenomvalide']);
 
     //$string = "Array ( [0] => Youssef [1] => meriyem [2] => siham ) ";
+    
+    
     $string1 = $_POST['prenomvalide'];
     $string2 = $_POST['nomvalide'];
     $string3 = $_POST['prenomnonvalide'];
@@ -15,15 +17,36 @@ if (isset($_POST['prenomvalide']) && isset($_POST['nomvalide']) && isset($_POST[
     $string5 = $_POST['prenomentame'];
     $string6 = $_POST['nomentame'];
 
-    $arr1 = array();
-    $s1 = explode(" ",$string1);
+
+
+    
+    /* echo '<pre>';
+    echo $stringtest;
+    echo '</pre>'; */
+
+
+    //echo '<pre>';
+    //echo $string1;
+    //echo '</pre>';
+
+
+/*     $arr1 = array();
+    $s1 = explode(" ",$stringtest);
     for ($i=6; $i < sizeof($s1) ; $i+=6) { 
         //echo $s[$i];
         //echo '<br>';
         array_push($arr1,$s1[$i]);
     }
+    sort($arr1);
+    foreach ($arr1 as $key => $value) {
+        if ($value == " " || $value == "=>") {
+            //unset($arr1[$key]);
+        }
+    } */
+
+
     echo '<pre>';
-    print_r($arr1);
+    //print_r($arr1);
     echo '</pre>';
     //print_r(array_filter($arr));
     /* for ($i=0; $i < sizeof($arr1); $i++) {
@@ -63,3 +86,29 @@ print "$s\n"; */
 
 
 //print_r($s); 
+
+
+include "include.php";
+$arr1 = array();
+    $s1 = explode(" ",$stringtest);
+    for ($i=6; $i < sizeof($s1) ; $i+=6) { 
+        //echo $s[$i];
+        //echo '<br>';
+        array_push($arr1,$s1[$i]);
+    }
+
+
+$arrayName = array('A' => 1, 'B' => 2, 'C'=> '', 'D' => '=>','E' => 6, 'F' => 'M', 'G'=> '', 'H' => '=>', 'I' => '=>', 'J' => '=>',  'K' => '',  'L' => 58, 'M' => 'Abd' );
+//sort($arr1);
+//print_r($arrayName);
+
+
+
+foreach ($arr1 as $key => $value) {
+    if (!preg_match('/^[a-zA-Z]+/', $value)) {
+        unset($arr1[$key]);
+    }
+}
+echo '<pre>';
+print_r($arr1);
+echo '</pre>'; 
