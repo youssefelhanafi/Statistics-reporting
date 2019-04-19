@@ -89,7 +89,7 @@ print "$s\n"; */
 
 
 include "include.php";
-$arr1 = array();
+/* $arr1 = array();
     $s1 = explode(" ",$stringtest);
     for ($i=6; $i < sizeof($s1) ; $i+=6) { 
         //echo $s[$i];
@@ -111,4 +111,29 @@ foreach ($arr1 as $key => $value) {
 }
 echo '<pre>';
 print_r($arr1);
-echo '</pre>'; 
+echo '</pre>';  */
+$arrayName = array('A' => 1, 'B' => 2, 'C'=> '', 'D' => '=>','E' => 6, 'F' => 'M', 'G'=> '', 'H' => '=>', 'I' => '=>', 'J' => '=>',  'K' => '',  'L' => 58, 'M' => 'Abd' );
+
+
+$arr1 = arrProcess($stringtest);
+
+function arrProcess($string){
+        $arr = array();
+        $s = explode(" ",$string);
+        for ($i=6; $i < sizeof($s) ; $i+=6) { 
+            //echo $s[$i];
+            //echo '<br>';
+            array_push($arr,$s[$i]);
+        }
+        foreach ($arr as $key => $value) {
+            if (!preg_match('/^[a-zA-Z]+/', $value)) {
+                unset($arr[$key]);
+            }
+        }
+
+        return $arr;
+}
+
+echo '<pre>';
+print_r($arr1);
+echo '</pre>';

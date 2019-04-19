@@ -108,9 +108,12 @@ if (mysqli_num_rows($result1) > 0) {
     $nbrtermine = 0;
 }
 $query11 = "SELECT 
-u.id as id,
+u.idnumber as matricule,
 u.firstname,
-u.lastname
+u.lastname,
+f24.data as direction,
+f23.data as dga,
+f12.data as unite
 from mdl_course c
 JOIN mdl_context AS ctx ON c.id = ctx.instanceid
 JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
@@ -120,15 +123,27 @@ LEFT JOIN mdl_user_enrolments AS enr ON enr.enrolid = er.id
 JOIN mdl_grade_grades AS gg ON gg.userid = u.id
 JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
 JOIN mdl_course_categories AS cc ON cc.id = c.category
+LEFT JOIN mdl_user_info_data AS f24  ON u.id = f24.userid and f24.fieldid=24 
+LEFT JOIN mdl_user_info_data AS f23  ON u.id = f23.userid and f23.fieldid=23 
+LEFT JOIN mdl_user_info_data AS f12  ON u.id = f12.userid and f12.fieldid=12 
 where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) and gi.id = ".$selected_val."
 and ROUND(gg.finalgrade,2) > 0 AND   FROM_UNIXTIME(gg.timemodified,'%d/%m/%Y') is not NULL
 ";
 $result11 = mysqli_query($db,$query11);
 $prenomvalide = array();
 $nomvalide = array();
+$matricule1 = array();
+$direction1 = array();
+$dga1 = array();
+$unite1 = array();
 while ($row11 = mysqli_fetch_assoc($result11)) {
     array_push($prenomvalide,$row11['firstname']);
     array_push($nomvalide,$row11['lastname']);
+    array_push($matricule1,$row11['matricule']);
+    array_push($direction1,$row11['direction']);
+    array_push($dga1,$row11['dga']);
+    array_push($unite1,$row11['unite']);
+
 }
 
 // Query 2
@@ -157,10 +172,7 @@ if (mysqli_num_rows($result2) > 0) {
 
 // Query 3 Collaborateurs n'ayant pas validé la formation
 $query3 = "SELECT 
-count(*) as nbrencours,
-u.id as id,
-u.firstname,
-u.lastname
+count(*) as nbrencours
 from mdl_course c
 JOIN mdl_context AS ctx ON c.id = ctx.instanceid
 JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
@@ -183,15 +195,21 @@ if (mysqli_num_rows($result3) > 0) {
 }
 
 $query33 = "SELECT 
-u.id as id,
+u.idnumber as matricule,
 u.firstname,
-u.lastname
+u.lastname,
+f24.data as direction,
+f23.data as dga,
+f12.data as unite
 from mdl_course c
 JOIN mdl_context AS ctx ON c.id = ctx.instanceid
 JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
 LEFT JOIN mdl_enrol AS er ON er.courseid = c.id
 JOIN mdl_user AS u ON u.id = ra.userid
 LEFT JOIN mdl_user_enrolments AS enr ON enr.enrolid = er.id
+LEFT JOIN mdl_user_info_data AS f24  ON u.id = f24.userid and f24.fieldid=24 
+LEFT JOIN mdl_user_info_data AS f23  ON u.id = f23.userid and f23.fieldid=23 
+LEFT JOIN mdl_user_info_data AS f12  ON u.id = f12.userid and f12.fieldid=12 
 JOIN mdl_grade_grades AS gg ON gg.userid = u.id
 JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
 JOIN mdl_course_categories AS cc ON cc.id = c.category
@@ -200,17 +218,22 @@ where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) and gi.id
 $result33 = mysqli_query($db,$query33);
 $prenomnonvalide = array();
 $nomnonvalide = array();
+$matricule2 = array();
+$direction2 = array();
+$dga2 = array();
+$unite2 = array();
 while ($row33 = mysqli_fetch_assoc($result33)) {
     array_push($prenomnonvalide,$row33['firstname']);
     array_push($nomnonvalide,$row33['lastname']);
+    array_push($matricule2,$row33['matricule']);
+    array_push($direction2,$row33['direction']);
+    array_push($dga2,$row33['dga']);
+    array_push($unite2,$row33['unite']);
 }
 
 // Query 4 Collaborateurs n'ayant pas encore entamé a formation
 $query4 = "SELECT 
-count(*) as nbrjamais,
-u.id as id,
-u.firstname,
-u.lastname
+count(*) as nbrjamais
 from mdl_course c
 JOIN mdl_context AS ctx ON c.id = ctx.instanceid
 JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
@@ -235,15 +258,21 @@ if (mysqli_num_rows($result4) > 0) {
 }
 
 $query44 = "SELECT 
-u.id as id,
+u.idnumber as matricule,
 u.firstname,
-u.lastname
+u.lastname,
+f24.data as direction,
+f23.data as dga,
+f12.data as unite
 from mdl_course c
 JOIN mdl_context AS ctx ON c.id = ctx.instanceid
 JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
 LEFT JOIN mdl_enrol AS er ON er.courseid = c.id
 JOIN mdl_user AS u ON u.id = ra.userid
 LEFT JOIN mdl_user_enrolments AS enr ON enr.enrolid = er.id
+LEFT JOIN mdl_user_info_data AS f24  ON u.id = f24.userid and f24.fieldid=24 
+LEFT JOIN mdl_user_info_data AS f23  ON u.id = f23.userid and f23.fieldid=23 
+LEFT JOIN mdl_user_info_data AS f12  ON u.id = f12.userid and f12.fieldid=12 
 JOIN mdl_grade_grades AS gg ON gg.userid = u.id
 JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
 JOIN mdl_course_categories AS cc ON cc.id = c.category
@@ -254,9 +283,17 @@ and ROUND(gg.finalgrade,2) is null
 $result44 = mysqli_query($db,$query44);
 $prenomentame = array();
 $nomentame = array();
+$matricule3 = array();
+$direction3 = array();
+$dga3 = array();
+$unite3 = array();
 while ($row44 = mysqli_fetch_assoc($result44)) {
     array_push($prenomentame,$row44['firstname']);
     array_push($nomentame,$row44['lastname']);
+    array_push($matricule3,$row44['matricule']);
+    array_push($direction3,$row44['direction']);
+    array_push($dga3,$row44['dga']);
+    array_push($unite3,$row44['unite']);
 }
 
 //END Custom queries
@@ -277,26 +314,8 @@ if(is_nan($tauxrealisation)) $tauxrealisation = 0 ;
 if(is_nan($tauxparticipation)) $tauxparticipation = 0 ;
 if(is_nan($tauxechec )) $tauxechec = 0 ;
 
-
-
-
-
-$arr1 = serialize($prenomvalide);
-$encoded1=htmlentities($arr1);
-$arr2 = serialize($nomvalide);
-$encoded2=htmlentities($arr2);
-$arr3 = serialize($prenomnonvalide);
-$encoded3=htmlentities($arr3);
-$arr4 = serialize($nomnonvalide);
-$encoded4=htmlentities($arr4);
-
-
-
 ?>
 
-
-
-    
     <!-- /.row -->
     <div class="row">
         <div class="col-sm-6">
@@ -501,11 +520,26 @@ $encoded4=htmlentities($arr4);
 
                 <input type="hidden" name="prenomvalide" id="hiddenField" value="<?php print_r($prenomvalide)  ?>"/>
                 <input type="hidden" name="nomvalide" id="hiddenField" value="<?php print_r($nomvalide) ?>"/>
+                <input type="hidden" name="matricule1" id="hiddenField" value="<?php print_r($matricule1)  ?>"/>
+                <input type="hidden" name="direction1" id="hiddenField" value="<?php print_r($direction1) ?>"/>
+                <input type="hidden" name="dga1" id="hiddenField" value="<?php print_r($dga1)  ?>"/>
+                <input type="hidden" name="unite1" id="hiddenField" value="<?php print_r($unite1) ?>"/>
+
+
                 <input type="hidden" name="prenomnonvalide" id="hiddenField" value="<?php print_r($prenomnonvalide)  ?>"/>
                 <input type="hidden" name="nomnonvalide" id="hiddenField" value="<?php print_r($nomnonvalide) ?>"/>
+                <input type="hidden" name="matricule2" id="hiddenField" value="<?php print_r($matricule2)  ?>"/>
+                <input type="hidden" name="direction2" id="hiddenField" value="<?php print_r($direction2) ?>"/>
+                <input type="hidden" name="dga2" id="hiddenField" value="<?php print_r($dga2)  ?>"/>
+                <input type="hidden" name="unite2" id="hiddenField" value="<?php print_r($unite2) ?>"/>
+
+
                 <input type="hidden" name="prenomentame" id="hiddenField" value="<?php print_r($prenomentame)  ?>"/>
                 <input type="hidden" name="nomentame" id="hiddenField" value="<?php print_r($nomentame) ?>"/>
-
+                <input type="hidden" name="matricule3" id="hiddenField" value="<?php print_r($matricule3)  ?>"/>
+                <input type="hidden" name="direction3" id="hiddenField" value="<?php print_r($direction3) ?>"/>
+                <input type="hidden" name="dga3" id="hiddenField" value="<?php print_r($dga3)  ?>"/>
+                <input type="hidden" name="unite3" id="hiddenField" value="<?php print_r($unite3) ?>"/>
 
 
                 <input type="submit" name="SubmitButton" class="btn btn-success" value="Télécharger Excel" /><br>

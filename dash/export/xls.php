@@ -1,5 +1,20 @@
 <?php
+function arrProcess($string){
+    $arr = array();
+    $s = explode(" ",$string);
+    for ($i=6; $i < sizeof($s) ; $i+=6) { 
+        //echo $s[$i];
+        //echo '<br>';
+        array_push($arr,$s[$i]);
+    }
+    foreach ($arr as $key => $value) {
+        if (!preg_match('/^[a-zA-Z]+/', $value)) {
+            unset($arr[$key]);
+        }
+    }
 
+    return $arr;
+}
 //require_once('/var/www/html/moodle/lib/excellib.class.php');
 $excellib = '/var/www/html/moodle/lib/excellib.class.php';
 if (file_exists($excellib)) {
@@ -20,6 +35,21 @@ if (file_exists($excellib)) {
             $string4 = $_POST['nomnonvalide'];
             $string5 = $_POST['prenomentame'];
             $string6 = $_POST['nomentame'];
+            
+            $string7= $_POST['matricule1'];
+            $string8= $_POST['direction1'];
+            $string9= $_POST['dga1'];
+            $string10= $_POST['unite1'];
+            $string11= $_POST['matricule2'];
+            $string12= $_POST['direction2'];
+            $string13= $_POST['dga2'];
+            $string14= $_POST['unite2'];
+            $string15= $_POST['matricule3'];
+            $string16= $_POST['direction3'];
+            $string17= $_POST['dga3'];
+            $string18= $_POST['unite3'];
+            //$string19= $_POST[''];
+
 
 
             $tauxrealisation = $_POST['realisation'];
@@ -34,85 +64,30 @@ if (file_exists($excellib)) {
         }
 
         //get Data
+        //validé
+        $arr1 = arrProcess($string1);
+        $arr2 = arrProcess($string2);
+        $arr7 = arrProcess($string7);//Matricule
+        $arr8 = arrProcess($string8);//direction
+        $arr9 = arrProcess($string9);//dga
+        $arr10 = arrProcess($string10);//unite
+        //non validé
+        $arr3 = arrProcess($string3);
+        $arr4 = arrProcess($string4);
+        $arr11 = arrProcess($string11);
+        $arr12 = arrProcess($string12);
+        $arr13 = arrProcess($string13);
+        $arr14 = arrProcess($string14);
+        //non entamé
+        $arr5 = arrProcess($string5);
+        $arr6 = arrProcess($string6);
+        $arr15 = arrProcess($string15);
+        $arr16 = arrProcess($string16);
+        $arr17 = arrProcess($string17);
+        $arr18 = arrProcess($string18);
 
-        $arr1 = array();
-        $s1 = explode(" ",$string1);
-        for ($i=6; $i < sizeof($s1) ; $i+=6) { 
-            //echo $s[$i];
-            //echo '<br>';
-            array_push($arr1,$s1[$i]);
-        }
-        foreach ($arr1 as $key => $value) {
-            if (!preg_match('/^[a-zA-Z]+/', $value)) {
-                unset($arr1[$key]);
-            }
-        }
         
-        $arr2 = array();
-        $s2 = explode(" ",$string2);
-        for ($i=6; $i < sizeof($s2) ; $i+=6) { 
-            //echo $s[$i];
-            //echo '<br>';
-            array_push($arr2,$s2[$i]);
-        }
-        foreach ($arr2 as $key => $value) {
-            if (!preg_match('/^[a-zA-Z]+/', $value)) {
-                unset($arr2[$key]);
-            }
-        }
-
-        $arr3 = array();
-        $s3 = explode(" ",$string3);
-        for ($i=6; $i < sizeof($s3) ; $i+=6) { 
-            //echo $s[$i];
-            //echo '<br>';
-            array_push($arr3,$s3[$i]);
-        }
-        foreach ($arr3 as $key => $value) {
-            if (!preg_match('/^[a-zA-Z]+/', $value)) {
-                unset($arr3[$key]);
-            }
-        }
         
-        $arr4 = array();
-        $s4 = explode(" ",$string4);
-        for ($i=6; $i < sizeof($s4) ; $i+=6) { 
-            //echo $s[$i];
-            //echo '<br>';
-            array_push($arr4,$s4[$i]);
-        }
-        foreach ($arr4 as $key => $value) {
-            if (!preg_match('/^[a-zA-Z]+/', $value)) {
-                unset($arr4[$key]);
-            }
-        }
-        
-        $arr5 = array();
-        $s5 = explode(" ",$string5);
-        for ($i=6; $i < sizeof($s5) ; $i+=6) { 
-            //echo $s[$i];
-            //echo '<br>';
-            array_push($arr5,$s5[$i]);
-        }
-        foreach ($arr5 as $key => $value) {
-            if (!preg_match('/^[a-zA-Z]+/', $value)) {
-                unset($arr5[$key]);
-            }
-        }
-
-        $arr6 = array();
-        $s6 = explode(" ",$string6);
-        for ($i=6; $i < sizeof($s6) ; $i+=6) { 
-            //echo $s[$i];
-            //echo '<br>';
-            array_push($arr6,$s6[$i]);
-        }
-        foreach ($arr6 as $key => $value) {
-            if (!preg_match('/^[a-zA-Z]+/', $value)) {
-                unset($arr6[$key]);
-            }
-        }
-
         //end get data
 
         $filename = 'Dash_'.(time());
@@ -123,58 +98,75 @@ if (file_exists($excellib)) {
         /// Sending HTTP headers
         $workbook->send($downloadfilename);
         /// Adding the worksheet
-        $myxls = $workbook->add_worksheet($filename);
+        $myxls0 = $workbook->add_worksheet("formation validé");
+        $myxls1 = $workbook->add_worksheet("formation non validé");
+        $myxls2 = $workbook->add_worksheet("formation non entamé");
+        $myxls3 = $workbook->add_worksheet("stats");
 
 
-        /* $myxls->write_string(0, 0, 'Taux de réalisation %');
-        $myxls->write_string(0, 1, 'Taux de participation %');
-        $myxls->write_string(0, 2, 'Taux d\'échec %');
-        $myxls->write_string(0, 3, 'Collaborateur ayant validé la formation');
-        $myxls->write_string(0, 4, 'Collaborateur n\'ayant pas validé la formation');
-        $myxls->write_string(0, 5, 'Collaborateur n\'ayant pas encore entamé la formation');
-        for ($i=0; $i < sizeof($tab); $i++) { 
-            $myxls->write_string(1, $i, $tab[$i]);
-        } */
-        //$format = array('font'=>array('size'=>10, 'name'=>'Arial'));
-        $myxls->write_string(0, 0, 'Prénom(formation validé)',$format = array('font'=>array('size'=>10, 'name'=>'Arial')));
-        $myxls->write_string(0, 1, 'Nom(formation validé)');
-        $myxls->write_string(0, 2, 'Prénom(formation non validé)');
-        $myxls->write_string(0, 3, 'Nom(formation non validé)');
-        $myxls->write_string(0, 4, 'Prénom(formation non entamé)');
-        $myxls->write_string(0, 5, 'Nom(formation non entamé)');
-
-        $myxls->write_string(2, 9, 'Taux de réalisation');
-        $myxls->write_string(3, 9, $tauxrealisation.'%');
-        $myxls->write_string(2, 10, 'Taux de participation');
-        $myxls->write_string(3, 10, $tauxparticipation.'%');
-        $myxls->write_string(2, 11, 'Taux d\'échec');
-        $myxls->write_string(3, 11, $tauxechec.'%');
-        $myxls->write_string(4, 9, 'Collaborateur ayant validé la formation');
-        $myxls->write_string(5, 9, $nbrtermine);
-        $myxls->write_string(4, 10, 'Collaborateurs n\'ayant pas validé la formation');
-        $myxls->write_string(5, 10, $nbrstatusencours);
-        $myxls->write_string(4, 11, 'Collaborateurs n\'ayant pas encore entamé a formation');
-        $myxls->write_string(5, 11, $nbrstatusjamais);
+        //formation validé
+        $myxls0->write_string(0, 0, 'Matricule');
+        $myxls0->write_string(0, 1, 'Prénom');
+        $myxls0->write_string(0, 2, 'Nom');
+        $myxls0->write_string(0, 3, 'Direction');
+        $myxls0->write_string(0, 4, 'dga');
+        $myxls0->write_string(0, 5, 'Unité');
+        //formation non validé
+        $myxls1->write_string(0, 0, 'Matricule');
+        $myxls1->write_string(0, 1, 'Prénom');
+        $myxls1->write_string(0, 2, 'Nom');
+        $myxls1->write_string(0, 3, 'Direction');
+        $myxls1->write_string(0, 4, 'dga');
+        $myxls1->write_string(0, 5, 'Unité');
+        //formation non entamé
+        $myxls2->write_string(0, 0, 'Matricule');
+        $myxls2->write_string(0, 1, 'Prénom');
+        $myxls2->write_string(0, 2, 'Nom');
+        $myxls2->write_string(0, 3, 'Direction');
+        $myxls2->write_string(0, 4, 'dga');
+        $myxls2->write_string(0, 5, 'Unité');
+        //stats
+        $myxls3->write_string(2, 9, 'Taux de réalisation');
+        $myxls3->write_string(3, 9, $tauxrealisation.'%');
+        $myxls3->write_string(2, 10, 'Taux de participation');
+        $myxls3->write_string(3, 10, $tauxparticipation.'%');
+        $myxls3->write_string(2, 11, 'Taux d\'échec');
+        $myxls3->write_string(3, 11, $tauxechec.'%');
+        $myxls3->write_string(4, 9, 'Collaborateur ayant validé la formation');
+        $myxls3->write_string(5, 9, $nbrtermine);
+        $myxls3->write_string(4, 10, 'Collaborateurs n\'ayant pas validé la formation');
+        $myxls3->write_string(5, 10, $nbrstatusencours);
+        $myxls3->write_string(4, 11, 'Collaborateurs n\'ayant pas encore entamé a formation');
+        $myxls3->write_string(5, 11, $nbrstatusjamais);
 
 
         for ($i=1; $i <= sizeof($arr1); $i++) { 
-            $myxls->write_string($i, 0, $arr1[$i-1]);
+            $myxls0->write_string($i, 0, $arr7[$i-1]);
+            $myxls0->write_string($i, 1, $arr1[$i-1]);
+            $myxls0->write_string($i, 2, $arr2[$i-1]);
+            $myxls0->write_string($i, 3, $arr8[$i-1]);
+            $myxls0->write_string($i, 4, $arr9[$i-1]);
+            $myxls0->write_string($i, 5, $arr10[$i-1]);
         }
-        for ($i=1; $i <= sizeof($arr2); $i++) { 
-            $myxls->write_string($i, 1, $arr2[$i-1]);
-        }
+
         for ($i=1; $i <= sizeof($arr3); $i++) { 
-            $myxls->write_string($i, 2, $arr3[$i-1]);
+            $myxls1->write_string($i, 0, $arr11[$i-1]);
+            $myxls1->write_string($i, 1, $arr3[$i-1]);
+            $myxls1->write_string($i, 2, $arr4[$i-1]);
+            $myxls1->write_string($i, 3, $arr12[$i-1]);
+            $myxls1->write_string($i, 4, $arr13[$i-1]);
+            $myxls1->write_string($i, 5, $arr14[$i-1]);
         }
-        for ($i=1; $i <= sizeof($arr4); $i++) { 
-            $myxls->write_string($i, 3, $arr4[$i-1]);
-        }
+
         for ($i=1; $i <= sizeof($arr5); $i++) { 
-            $myxls->write_string($i, 4, $arr5[$i-1]);
+            $myxls2->write_string($i, 0, $arr15[$i-1]);
+            $myxls2->write_string($i, 1, $arr5[$i-1]);
+            $myxls2->write_string($i, 2, $arr6[$i-1]);
+            $myxls2->write_string($i, 3, $arr16[$i-1]);
+            $myxls2->write_string($i, 4, $arr17[$i-1]);
+            $myxls2->write_string($i, 5, $arr18[$i-1]);
         }
-        for ($i=1; $i <= sizeof($arr6); $i++) { 
-            $myxls->write_string($i, 5, $arr6[$i-1]);
-        }
+
 
         $workbook->close();
         exit;

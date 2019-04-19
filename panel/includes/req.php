@@ -121,6 +121,7 @@ function sql0v1($db,$selected_val){
     join mdl_enrol er on enr.enrolid=er.id
     join mdl_course c on er.courseid=c.id
     JOIN mdl_course_categories cat on cat.id=c.category
+    
     left join mdl_grade_items gi on c.id=gi.courseid and gi.itemtype<>'course'
 
 
