@@ -219,17 +219,31 @@ include './includes/header2.php';
         
         switch ($_GET['rapport']) {
             case '1':
-                //$vartest = strval(table($query0,$sql0));
-                //print $vartest;
-                table($query0,$sql0);
+                //table($query0,$sql0);
                 //print_r($query0);
                 //echo '<pre>';
                 //echo $sql0;
                 //echo '</pre>';
+                if (mysqli_num_rows($query0) == 0) {
+                    echo '<div class="alert alert-danger" role="alert">
+                    Aucun résultat trouvé pour cette requête !
+                  </div>';
+                }
+                else {
+                    table($query0,$sql0);
+                }
                 break;
             
             case '2':
-                table($query1,$sql1); 
+                //table($query1,$sql1); 
+                if (mysqli_num_rows($query1) == 0) {
+                    echo '<div class="alert alert-danger" role="alert">
+                    Aucun résultat trouvé pour cette requête !
+                  </div>';
+                }
+                else {
+                    table($query1,$sql1);
+                }
                 break;
         }
         }    
