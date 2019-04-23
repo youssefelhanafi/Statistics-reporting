@@ -1,8 +1,8 @@
 <?php
 //Database credentials
-$dbHost     = 'localhost';
-$dbUsername = 'youssef';
-$dbPassword = 'password';
+$dbHost     = '10.9.121.157';
+$dbUsername = '';
+$dbPassword = '';
 $dbName     = 'moodle';
 
 //Connect and select the database

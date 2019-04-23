@@ -544,7 +544,7 @@ if(is_nan($tauxechec )) $tauxechec = 0 ;
 
 
                 <input type="submit" name="SubmitButton" class="btn btn-success" value="Télécharger Excel" /><br>
-                <a href="http://localhost/moodle/">Accueil<a/>
+                <a href="http://10.9.121.157/moodle352/">Accueil<a/>
             </form>
         </div>
         
@@ -553,7 +553,7 @@ if(is_nan($tauxechec )) $tauxechec = 0 ;
     <!-- /.row -->
 
 <!-- /#page-wrapper -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>à
 <script type="text/javascript">
 $(document).ready(function(){
     $('#categorie').on('change',function(){
