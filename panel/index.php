@@ -112,20 +112,6 @@ include './includes/header2.php';
                     <div class="col-sm-6" align="center">
                     <label><input type="checkbox" class="agreedirection"> Activer filtre direction</label>
                     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                          ';
                 }
                 ?>
@@ -212,6 +198,32 @@ include './includes/header2.php';
             $dga = htmlspecialchars($_POST['dga']);
             $direction = htmlspecialchars($_POST['direction']);
             list($query0,$sql0) = sql0v4($db,$selected_val,$time1,$time2,$time3,$time4,$unite,$manager,$dga,$direction);
+        }
+        if (isset($_POST['debutf']) && isset($_POST['finf']) && isset($_POST['unite']) && isset($_POST['manager']) 
+        && isset($_POST['dga']) && isset($_POST['direction'])) 
+        { // All filters with date formation
+            $time1 = strtotime($_POST['debutf'].' 02:00');
+            $time2 = strtotime($_POST['finf'].' 02:00');
+            /* $time3 = strtotime($_POST['debutr'].' 02:00');
+            $time4 = strtotime($_POST['finr'].' 02:00'); */
+            $unite = htmlspecialchars($_POST['unite']);
+            $manager = htmlspecialchars($_POST['manager']);
+            $dga = htmlspecialchars($_POST['dga']);
+            $direction = htmlspecialchars($_POST['direction']);
+            list($query0,$sql0) = sql0v5($db,$selected_val,$time1,$time2,$unite,$manager,$dga,$direction);
+        }
+        if(isset($_POST['debutr']) && isset($_POST['finr'])
+        && isset($_POST['unite']) && isset($_POST['manager']) && isset($_POST['dga']) && isset($_POST['direction']))
+        { // ALL filters with date recrutement
+            /* $time1 = strtotime($_POST['debutf'].' 02:00');
+            $time2 = strtotime($_POST['finf'].' 02:00'); */
+            $time3 = strtotime($_POST['debutr'].' 02:00');
+            $time4 = strtotime($_POST['finr'].' 02:00');
+            $unite = htmlspecialchars($_POST['unite']);
+            $manager = htmlspecialchars($_POST['manager']);
+            $dga = htmlspecialchars($_POST['dga']);
+            $direction = htmlspecialchars($_POST['direction']);
+            list($query0,$sql0) = sql0v6($db,$selected_val,$time3,$time4,$unite,$manager,$dga,$direction);
         }
 
 
