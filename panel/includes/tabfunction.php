@@ -1,4 +1,7 @@
 <?php
+
+
+
 function table($result,$query) {
     $result->fetch_array( MYSQLI_ASSOC );
     echo '<form action="./export/xls.php"  method="POST">';
@@ -13,8 +16,8 @@ function table($result,$query) {
     echo '<input type="submit" name="SubmitButton" class="btn btn-success" value="Télécharger Excel" />';
     echo '<input type="hidden" name="query" id="hiddenField" value="'.$query.'"/>';
     echo '<br>';
-    echo '<a href="http://10.9.121.157/moodle352/">Accueil<a/>';
-    echo "</div></div>";
+    echo '<a href="http://localhost/moodle/">Accueil<a/>';
+    echo "</div></div></form>";
 }
 
 function tableHead( $result ) {
@@ -36,7 +39,7 @@ function tableBody( $result ) {
     echo '<tbody>';
     foreach ( $result as $x ) {
     echo '<tr>';
-    foreach ( $x as $y ) {
+    foreach ( $x as $k => $y ) {
         echo '<td>' . $y . '</td>';
     }
     echo '</tr>';

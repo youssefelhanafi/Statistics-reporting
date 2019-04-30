@@ -21,8 +21,19 @@ include './includes/header2.php';
           <form action="" method="post">
             <div class="row">
               <div class="col-sm-4">
-                  <select id="categorie" class="form-control">
-                        <option value="">Choisir catégorie</option>
+                  <select id="categorie" class="form-control" name="categorie">
+                        
+                        <?php
+                        if (isset($_POST['categorie'])) {
+                            $sqli = "SELECT id,name from mdl_course_categories where id = ".$_POST['categorie'];
+                            $queryi = $db->query($sqli);
+                            $rowi = $queryi->fetch_assoc();
+                            echo '<option value="'.$_POST['categorie'].'">'.$rowi['name'].'</option>';
+                        }
+                        else{
+                            echo '<option value="">Choisir catégorie</option>';
+                        }
+                        ?>
                         <?php
                             if($rowCount > 0){
                                 while($row = $query->fetch_assoc()){ 
@@ -35,7 +46,7 @@ include './includes/header2.php';
                   </select>
               </div>
               <div class="col-sm-4">
-                    <select id="cours" class="form-control">
+                    <select id="cours" class="form-control" name="cours">
                         <option value="">Sélectionnez d'abord la catégorie</option>
                     </select>
                     <br>
@@ -50,10 +61,11 @@ include './includes/header2.php';
 
                 <?php
                 if ($_GET['rapport'] == 1) {
-                    echo '
+                   // echo ' 
+                    ?>
                     <div class="col-sm-4" align="center">
                     Date début formation:
-                    <input id="formation" type="date" name="debutf"><br><br>
+                    <input id="formation" type="date" name="debutf" ><br><br>
                     </div>
                     <div class="col-sm-4" align="center">
                     Date fin formation:
@@ -73,17 +85,9 @@ include './includes/header2.php';
                     <div class="col-sm-4" align="center">
                     <label><input type="checkbox" class="agree1"> Activer date recrutement</label>
                     </div>
-
-
-
-
-
-
-
-                    
                     <div class="col-sm-6" align="center">
                     Unité:
-                    <input id="filtreunite" type="text" name="unite"><br><br>
+                    <input id="filtreunite" type="text" name="unite" value="<?php  if (isset($_POST['unite'])){echo htmlspecialchars($_POST['unite']); } ?> "><br><br>
                     </div>
                     <div class="col-sm-6" align="center">
                     <label><input type="checkbox" class="agreeunite"> Activer filtre unité</label>
@@ -91,7 +95,7 @@ include './includes/header2.php';
 
                     <div class="col-sm-6" align="center">
                     Manager:
-                    <input id="filtremanager" type="text" name="manager"><br><br>
+                    <input id="filtremanager" type="text" name="manager" value="<?php  if (isset($_POST['manager'])){echo htmlspecialchars($_POST['manager']); } ?> "><br><br>
                     </div>
                     <div class="col-sm-6" align="center">
                     <label><input type="checkbox" class="agreemanager"> Activer filtre manager</label>
@@ -99,7 +103,7 @@ include './includes/header2.php';
 
                     <div class="col-sm-6" align="center">
                     dga:
-                    <input id="filtredga" type="text" name="dga"><br><br>
+                    <input id="filtredga" type="text" name="dga" value="<?php  if (isset($_POST['dga'])){echo htmlspecialchars($_POST['dga']); } ?> "><br><br>
                     </div>
                     <div class="col-sm-6" align="center">
                     <label><input type="checkbox" class="agreedga"> Activer filtre dga</label>
@@ -107,12 +111,13 @@ include './includes/header2.php';
 
                     <div class="col-sm-6" align="center">
                     direction:
-                    <input id="filtredirection" type="text" name="direction"><br><br>
+                    <input id="filtredirection" type="text" name="direction" value="<?php  if (isset($_POST['direction'])){echo htmlspecialchars($_POST['direction']); } ?> "><br><br>
                     </div>
                     <div class="col-sm-6" align="center">
                     <label><input type="checkbox" class="agreedirection"> Activer filtre direction</label>
                     </div>
                          ';
+                         <?php
                 }
                 ?>
                 <div class="col-sm-12" align="center">
@@ -125,7 +130,10 @@ include './includes/header2.php';
     </div>
   </div>
         <br><br>
-        <?php
+    <?php
+
+
+
     if(!isset($_POST['SubmitButton'])){  //No submit
         $selected_val = 'NULL';
     }
@@ -140,14 +148,12 @@ include './includes/header2.php';
         { // Date formation
             $time1 = strtotime($_POST['debutf'].' 02:00');
             $time2 = strtotime($_POST['finf'].' 02:00');
-            //$date_inscription = strval(date('d/m/Y',$time));
             list($query0,$sql0) = sql0v2($db,$selected_val,$time1,$time2);
         }
         if(isset($_POST['debutr']) && isset($_POST['finr']) )
         { // Date recrutement
             $time3 = strtotime($_POST['debutr'].' 02:00');
             $time4 = strtotime($_POST['finr'].' 02:00');
-            //$date_inscription = strval(date('d/m/Y',$time));
             list($query0,$sql0) = sql0dr($db,$selected_val,$time3,$time4);
         }
         if(isset($_POST['debutf']) && isset($_POST['finf']) && isset($_POST['debutr']) && isset($_POST['finr']))
@@ -204,8 +210,6 @@ include './includes/header2.php';
         { // All filters with date formation
             $time1 = strtotime($_POST['debutf'].' 02:00');
             $time2 = strtotime($_POST['finf'].' 02:00');
-            /* $time3 = strtotime($_POST['debutr'].' 02:00');
-            $time4 = strtotime($_POST['finr'].' 02:00'); */
             $unite = htmlspecialchars($_POST['unite']);
             $manager = htmlspecialchars($_POST['manager']);
             $dga = htmlspecialchars($_POST['dga']);
@@ -215,8 +219,6 @@ include './includes/header2.php';
         if(isset($_POST['debutr']) && isset($_POST['finr'])
         && isset($_POST['unite']) && isset($_POST['manager']) && isset($_POST['dga']) && isset($_POST['direction']))
         { // ALL filters with date recrutement
-            /* $time1 = strtotime($_POST['debutf'].' 02:00');
-            $time2 = strtotime($_POST['finf'].' 02:00'); */
             $time3 = strtotime($_POST['debutr'].' 02:00');
             $time4 = strtotime($_POST['finr'].' 02:00');
             $unite = htmlspecialchars($_POST['unite']);
@@ -225,29 +227,32 @@ include './includes/header2.php';
             $direction = htmlspecialchars($_POST['direction']);
             list($query0,$sql0) = sql0v6($db,$selected_val,$time3,$time4,$unite,$manager,$dga,$direction);
         }
-
-
         list($query1,$sql1) = sql1($db);
         
         switch ($_GET['rapport']) {
             case '1':
-                //table($query0,$sql0);
-                //print_r($query0);
-                //echo '<pre>';
-                //echo $sql0;
-                //echo '</pre>';
                 if (mysqli_num_rows($query0) == 0) {
                     echo '<div class="alert alert-danger" role="alert">
                     Aucun résultat trouvé pour cette requête !
                   </div>';
                 }
                 else {
+                    $sql = "create table if not exists testtemp".$selected_val."(
+                        id INT PRIMARY KEY AUTO_INCREMENT,
+                        req LONGTEXT NOT NULL,
+                        start_at TIME)
+                        ";
+                    $db->query($sql);
                     table($query0,$sql0);
+                    $sql1 = "insert into testtemp".$selected_val." (req,start_at) values ( ";
+                    $sql1 .= ' " ';
+                    $sql1 .= $sql0.' " ,';
+                    $sql1 .= ' " ';
+                    $sql1 .= date("h:i:s") . ' " )'; 
+                    $db->query($sql1);
                 }
-                break;
-            
+                break;    
             case '2':
-                //table($query1,$sql1); 
                 if (mysqli_num_rows($query1) == 0) {
                     echo '<div class="alert alert-danger" role="alert">
                     Aucun résultat trouvé pour cette requête !
@@ -259,7 +264,6 @@ include './includes/header2.php';
                 break;
         }
         }    
-        
     include './includes/footer2.php';
 ?>
         
