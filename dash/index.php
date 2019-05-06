@@ -22,7 +22,7 @@ $rowCount = $query->num_rows;
                         <?php
                             if($rowCount > 0){
                                 while($row = $query->fetch_assoc()){ 
-                                    echo '<option value="'.$row['id'].'">'.$row['name'].'</option>';
+                                    echo '<option value="'.$row['id'].'">'.utf8_encode($row['name']).'</option>';
                                 }
                             }else{
                                 echo '<option value="">Catégorie non disponible</option>';
@@ -86,7 +86,6 @@ echo '<br>';
 echo $_POST['activite'];
 echo '<br>'; */
 if (isset($_POST['categorie']) && empty($_POST['activite'])) {
-
     $query1 = "SELECT 
     count(distinct u.id) as nbr
     from mdl_course c
@@ -781,7 +780,7 @@ if(is_nan($tauxechec )) $tauxechec = 0 ;
 
 
                 <input type="submit" name="SubmitButton" class="btn btn-success" value="Télécharger Excel" /><br>
-                <a href="http://10.9.121.157/moodle352/">Accueil</a>
+                <a href="http://localhost/moodle/">Accueil</a>
             </form>
         </div>
         

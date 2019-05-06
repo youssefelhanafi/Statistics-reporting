@@ -28,7 +28,7 @@ include './includes/header2.php';
                             $sqli = "SELECT id,name from mdl_course_categories where id = ".$_POST['categorie'];
                             $queryi = $db->query($sqli);
                             $rowi = $queryi->fetch_assoc();
-                            echo '<option value="'.$_POST['categorie'].'">'.$rowi['name'].'</option>';
+                            echo '<option value="'.$_POST['categorie'].'">'.utf8_encode($rowi['name']).'</option>';
                         }
                         else{
                             echo '<option value="">Choisir catégorie</option>';
@@ -37,7 +37,7 @@ include './includes/header2.php';
                         <?php
                             if($rowCount > 0){
                                 while($row = $query->fetch_assoc()){ 
-                                    echo '<option value="'.$row['id'].'">'.$row['name'].'</option>';
+                                    echo '<option value="'.$row['id'].'">'.utf8_encode($row['name']).'</option>';
                                 }
                             }else{
                                 echo '<option value="">Catégorie non disponible</option>';

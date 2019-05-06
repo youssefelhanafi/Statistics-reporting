@@ -82,6 +82,9 @@ class block_filtered_reporting extends block_list { // block class definition
         $url = new moodle_url('/blocks/filtered_reporting/dash/');
         $this->content->items[] = html_writer::link($url, get_string('addpage2', 'block_filtered_reporting'));
 
+        $url = new moodle_url('/blocks/filtered_reporting/panel/cohort.php');
+        $this->content->items[] = html_writer::link($url, get_string('addpage3', 'block_filtered_reporting'));
+
         return $this->content;
     }
     

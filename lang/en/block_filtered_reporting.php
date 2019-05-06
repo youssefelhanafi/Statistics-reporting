@@ -24,8 +24,8 @@
  */
 
 
-$string['pluginname'] = 'Filtered reporting';
-$string['filtered_reporting'] = 'Filtered reporting';
+$string['pluginname'] = 'Administation Moodle';
+$string['filtered_reporting'] = 'Administration Moodle';
 $string['filtered_reporting:addinstance'] = 'Add a new filtered reporting block';
 $string['filtered_reporting:myaddinstance'] = 'Add a new filtered reporting block to the My Moodle page';
 $string['contentinputlabel'] = 'Block Content';
@@ -35,6 +35,7 @@ $string['descsetbackground'] = 'Description of  ....';
 $string['addpage0'] = 'Suivi des formations';
 $string['addpage1'] = 'Liste des collaborateur';
 $string['addpage2'] = 'Dashboard';
+$string['addpage3'] = 'Inscription NR';
 $string['textfields'] = 'Form input';
 $string['edithtml'] = 'Filtered reporting';
 $string['filtered_reportingsettings'] = 'Filtered reporting';
