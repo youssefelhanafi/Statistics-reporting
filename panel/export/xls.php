@@ -16,9 +16,9 @@ if (file_exists($excellib)) {
         $sql = strval($_POST['query']);
 
         //db connection
-        $servername = "localhost";
-        $username = "youssef";
-        $password = "password";
+        $servername = "10.9.121.157";
+        $username = "";
+        $password = "";
         $database = "moodle";
 
         // Create connection

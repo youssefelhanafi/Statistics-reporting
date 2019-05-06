@@ -86,7 +86,7 @@ echo '<br>';
 echo $_POST['activite'];
 echo '<br>'; */
 if (isset($_POST['categorie']) && empty($_POST['activite'])) {
-    
+
     $query1 = "SELECT 
     count(distinct u.id) as nbr
     from mdl_course c
@@ -781,7 +781,7 @@ if(is_nan($tauxechec )) $tauxechec = 0 ;
 
 
                 <input type="submit" name="SubmitButton" class="btn btn-success" value="Télécharger Excel" /><br>
-                <a href="http://localhost/moodle/">Accueil</a>
+                <a href="http://10.9.121.157/moodle352/">Accueil</a>
             </form>
         </div>
         
