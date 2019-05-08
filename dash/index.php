@@ -780,7 +780,7 @@ if(is_nan($tauxechec )) $tauxechec = 0 ;
 
 
                 <input type="submit" name="SubmitButton" class="btn btn-success" value="Télécharger Excel" /><br>
-                <a href="http://localhost/moodle/">Accueil</a>
+                <a href="http://10.9.121.157/moodle352/">Accueil</a>
             </form>
         </div>
         

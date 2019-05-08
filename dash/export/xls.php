@@ -15,11 +15,11 @@ function arrProcess($string){
 
     return $arr;
 }
-//require_once('/var/www/html/moodle/lib/excellib.class.php');
-$excellib = '/var/www/html/moodle/lib/excellib.class.php';
+//require_once('/var/www/html/moodle352/lib/excellib.class.php');
+$excellib = '/var/www/html/moodle352/lib/excellib.class.php';
 if (file_exists($excellib)) {
 
-    $config = '/var/www/html/moodle/config.php';
+    $config = '/var/www/html/moodle352/config.php';
     if (file_exists($config)){
 
         

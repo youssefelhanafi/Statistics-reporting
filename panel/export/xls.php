@@ -16,9 +16,9 @@ if (file_exists($excellib)) {
         $sql = strval($_POST['query']);
 
         //db connection
-        $servername = "localhost";
-        $username = "youssef";
-        $password = "password";
+        $servername = "10.9.121.157";
+        $username = "";
+        $password = "";
         $database = "moodle";
 
         // Create connection
@@ -72,13 +72,13 @@ if (file_exists($excellib)) {
 
 
         for ($i=0; $i < sizeof($headers); $i++) { 
-            $myxls->write_string(0, $i, $headers[$i]);
+            $myxls->write_string(0, $i, utf8_encode($headers[$i]));
             
         }
         // END Headers
         for ($j=1; $j < sizeof($data)+2; $j++) { 
             for ($h=0; $h < sizeof($headers); $h++) { 
-                $myxls->write_string($j, $h, $data[$j-2][$headers[$h]]);
+                $myxls->write_string($j, $h, utf8_encode($data[$j-2][$headers[$h]]));
             }
             
         }
