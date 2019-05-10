@@ -17,30 +17,74 @@ $rowCount = $query->num_rows;
         </div>
         <div class="row">
             <div class="col-sm-4">
-                    <select id="categorie" class="form-control" name="categorie">
-                        <option value="">Choisir catégorie</option>
+            <select id="categorie" class="form-control" name="categorie">
+                        
                         <?php
-                            if($rowCount > 0){
-                                while($row = $query->fetch_assoc()){ 
-                                    echo '<option value="'.$row['id'].'">'.utf8_encode($row['name']).'</option>';
-                                }
-                            }else{
-                                echo '<option value="">Catégorie non disponible</option>';
+                        if (isset($_POST['categorie'])) {
+                            $sqli = "SELECT id,name from mdl_course_categories where id = ".$_POST['categorie'];
+                            $queryi = $db->query($sqli);
+                            $rowi = $queryi->fetch_assoc();
+                            echo '<option value="'.$_POST['categorie'].'">'.$rowi['name'].'</option>';
+                        }
+                        else{
+                            echo '<option value="">Choisir catégorie</option>';
+                        }
+                        if($rowCount > 0){
+                            while($row = $query->fetch_assoc()){ 
+                                echo '<option value="'.$row['id'].'">'.$row['name'].'</option>';
+                            }
+                        }else{
+                            echo '<option value="">Catégorie non disponible</option>';
                         }
                         ?>
-                    </select>
-                </div>
+                  </select>
+            </div>
 
                 <div class="col-sm-4">
-                    <select id="cours" class="form-control">
-                        <option value="">Sélectionnez d'abord la catégorie</option>
+                    <select id="cours" class="form-control" name="cours">
+                        <?php 
+                        if (isset($_POST['categorie']) && isset($_POST['cours'])) {
+                            $sql1 = "SELECT id,fullname from mdl_course where category = ".$_POST['categorie'];
+                            $query1 = $db->query($sql1);
+                            $row1 = $query1->fetch_assoc();
+                            echo '<option value="'.$_POST['cours'].'">'.$row1['fullname'].'</option>';
+                        }
+                        else{
+                            echo '<option value="">Choisir catégorie</option>';
+                        }
+                        if($rowCount > 0){
+                            while($row = $query->fetch_assoc()){ 
+                                echo '<option value="'.$row['id'].'">'.$row['fullname'].'</option>';
+                            }
+                        }else{
+                            echo '<option value="">Catégorie non disponible</option>';
+                        }
+                        ?>
+                        
                     </select>
                     <br>
                 </div>
 
                 <div class="col-sm-4">
                     <select id="activite" class="form-control" name="activite">
-                        <option value="">Sélectionnez d'abord le cours</option>
+                        <?php
+                        if (isset($_POST['categorie']) && isset($_POST['cours']) && isset($_POST['activite'])) {
+                            $sql2 = "SELECT id,itemname from mdl_grade_items where courseid = ".$_POST['cours']." AND itemtype <> 'course'";
+                            $query2 = $db->query($sql2);
+                            $row2 = $query2->fetch_assoc();
+                            echo '<option value="'.$_POST['cours'].'">'.$row2['itemname'].'</option>';
+                        }
+                        else{
+                            echo '<option value="">Choisir Activité</option>';
+                        }
+                        if($rowCount > 0){
+                            while($row = $query->fetch_assoc()){ 
+                                echo '<option value="'.$row['id'].'">'.$row['itemname'].'</option>';
+                            }
+                        }else{
+                            echo '<option value="">Cours non disponible</option>';
+                        }
+                        ?>
                     </select>
                 </div>
 
@@ -780,7 +824,7 @@ if(is_nan($tauxechec )) $tauxechec = 0 ;
 
 
                 <input type="submit" name="SubmitButton" class="btn btn-success" value="Télécharger Excel" /><br>
-                <a href="http://10.9.121.157/moodle352/">Accueil</a>
+                <a href="http://localhost/moodle">Accueil</a>
             </form>
         </div>
         

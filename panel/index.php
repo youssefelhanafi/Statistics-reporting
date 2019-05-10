@@ -28,33 +28,65 @@ include './includes/header2.php';
                             $sqli = "SELECT id,name from mdl_course_categories where id = ".$_POST['categorie'];
                             $queryi = $db->query($sqli);
                             $rowi = $queryi->fetch_assoc();
-                            echo '<option value="'.$_POST['categorie'].'">'.utf8_encode($rowi['name']).'</option>';
+                            echo '<option value="'.$_POST['categorie'].'">'.$rowi['name'].'</option>';
                         }
                         else{
                             echo '<option value="">Choisir catégorie</option>';
                         }
-                        ?>
-                        <?php
-                            if($rowCount > 0){
-                                while($row = $query->fetch_assoc()){ 
-                                    echo '<option value="'.$row['id'].'">'.utf8_encode($row['name']).'</option>';
-                                }
-                            }else{
-                                echo '<option value="">Catégorie non disponible</option>';
+                        if($rowCount > 0){
+                            while($row = $query->fetch_assoc()){ 
+                                echo '<option value="'.$row['id'].'">'.$row['name'].'</option>';
+                            }
+                        }else{
+                            echo '<option value="">Catégorie non disponible</option>';
                         }
                         ?>
                   </select>
               </div>
               <div class="col-sm-4">
                     <select id="cours" class="form-control" name="cours">
-                        <option value="">Sélectionnez d'abord la catégorie</option>
+                    <?php 
+                        if (isset($_POST['categorie']) && isset($_POST['cours'])) {
+                            $sql1 = "SELECT id,fullname from mdl_course where category = ".$_POST['categorie'];
+                            $query1 = $db->query($sql1);
+                            $row1 = $query1->fetch_assoc();
+                            echo '<option value="'.$_POST['cours'].'">'.$row1['fullname'].'</option>';
+                        }
+                        else{
+                            echo '<option value="">Choisir catégorie</option>';
+                        }
+                        if($rowCount > 0){
+                            while($row = $query->fetch_assoc()){ 
+                                echo '<option value="'.$row['id'].'">'.$row['fullname'].'</option>';
+                            }
+                        }else{
+                            echo '<option value="">Catégorie non disponible</option>';
+                        }
+                        ?>
                     </select>
                     <br>
                 </div>
 
                 <div class="col-sm-4">
                     <select id="activite" class="form-control" name="activite">
-                        <option value="">Sélectionnez d'abord le cours</option>
+                        <?php
+                        if (isset($_POST['categorie']) && isset($_POST['cours']) && isset($_POST['activite'])) {
+                            $sql2 = "SELECT id,itemname from mdl_grade_items where courseid = ".$_POST['cours']." AND itemtype <> 'course'";
+                            $query2 = $db->query($sql2);
+                            $row2 = $query2->fetch_assoc();
+                            echo '<option value="'.$_POST['cours'].'">'.$row2['itemname'].'</option>';
+                        }
+                        else{
+                            echo '<option value="">Choisir Activité</option>';
+                        }
+                        if($rowCount > 0){
+                            while($row = $query->fetch_assoc()){ 
+                                echo '<option value="'.$row['id'].'">'.$row['itemname'].'</option>';
+                            }
+                        }else{
+                            echo '<option value="">Cours non disponible</option>';
+                        }
+                        ?>
                     </select>
                 </div>
 
@@ -63,60 +95,105 @@ include './includes/header2.php';
                 if ($_GET['rapport'] == 1) {
                    // echo ' 
                     ?>
-                    <div class="col-sm-4" align="center">
-                    Date début formation:
-                    <input id="formation" type="date" name="debutf" ><br><br>
-                    </div>
-                    <div class="col-sm-4" align="center">
+                    <table>
+  <tr>
+    <td> 
+    
+    <div>
+      Date début formation:
+                <input id="formation" type="date" name="debutf" ><br><br>
+              </div>
+    
+    </td>
+    <td>
+	<div >
                     Date fin formation:
                     <input id="formation" type="date" name="finf"><br><br>
                     </div>
-                    <div class="col-sm-4" align="center">
+
+	</td>
+    <td>
+    <div >
                     <label><input type="checkbox" class="agree"> Activer date formation</label>
                     </div>
-                    <div class="col-sm-4" align="center">
+    
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <div >
                     Date début recrutement:
                     <input id="recrutement" type="date" name="debutr"><br><br>
                     </div>
-                    <div class="col-sm-4" align="center">
+    </td>
+    <td>
+    <div >
                     Date fin recrutement:
                     <input id="recrutement" type="date" name="finr"><br><br>
                     </div>
-                    <div class="col-sm-4" align="center">
+    </td>
+    <td>
+    <div >
                     <label><input type="checkbox" class="agree1"> Activer date recrutement</label>
                     </div>
-                    <div class="col-sm-6" align="center">
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <div >
                     Unité:
                     <input id="filtreunite" type="text" name="unite" value="<?php  if (isset($_POST['unite'])){echo htmlspecialchars($_POST['unite']); } ?> "><br><br>
                     </div>
-                    <div class="col-sm-6" align="center">
+    </td>
+    <td></td>
+    <td>
+    <div >
                     <label><input type="checkbox" class="agreeunite"> Activer filtre unité</label>
                     </div>
-
-                    <div class="col-sm-6" align="center">
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <div>
                     Manager:
                     <input id="filtremanager" type="text" name="manager" value="<?php  if (isset($_POST['manager'])){echo htmlspecialchars($_POST['manager']); } ?> "><br><br>
                     </div>
-                    <div class="col-sm-6" align="center">
+    </td>
+    <td></td>
+    <td><div >
                     <label><input type="checkbox" class="agreemanager"> Activer filtre manager</label>
-                    </div>
-
-                    <div class="col-sm-6" align="center">
+                    </div></td>
+  </tr>
+  <tr>
+    <td>
+     <div >
                     dga:
                     <input id="filtredga" type="text" name="dga" value="<?php  if (isset($_POST['dga'])){echo htmlspecialchars($_POST['dga']); } ?> "><br><br>
                     </div>
-                    <div class="col-sm-6" align="center">
+    </td>
+    <td></td>
+    <td>
+    <div >
                     <label><input type="checkbox" class="agreedga"> Activer filtre dga</label>
                     </div>
-
-                    <div class="col-sm-6" align="center">
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <div >
                     direction:
                     <input id="filtredirection" type="text" name="direction" value="<?php  if (isset($_POST['direction'])){echo htmlspecialchars($_POST['direction']); } ?> "><br><br>
                     </div>
-                    <div class="col-sm-6" align="center">
+    </td>
+    <td></td>
+    <td>
+    <div >
                     <label><input type="checkbox" class="agreedirection"> Activer filtre direction</label>
                     </div>
-                         ';
+    </td>
+  </tr>
+</table>
+                         
                          <?php
                 }
                 ?>
