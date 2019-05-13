@@ -30,8 +30,8 @@ $rowCount = $query->num_rows;
                             echo '<option value="">Choisir catégorie</option>';
                         }
                         if($rowCount > 0){
-                            while($row = $query->fetch_assoc()){ 
-                                echo '<option value="'.$row['id'].'">'.$row['name'].'</option>';
+                            while($rowi = $queryi->fetch_assoc()){ 
+                                echo '<option value="'.$rowi['id'].'">'.$rowi['name'].'</option>';
                             }
                         }else{
                             echo '<option value="">Catégorie non disponible</option>';
@@ -52,9 +52,9 @@ $rowCount = $query->num_rows;
                         else{
                             echo '<option value="">Choisir catégorie</option>';
                         }
-                        if($rowCount > 0){
-                            while($row = $query->fetch_assoc()){ 
-                                echo '<option value="'.$row['id'].'">'.$row['fullname'].'</option>';
+                        if($query1->num_rows > 0){
+                            while($row1 = $query1->fetch_assoc()){ 
+                                echo '<option value="'.$row1['id'].'">'.$row1['fullname'].'</option>';
                             }
                         }else{
                             echo '<option value="">Catégorie non disponible</option>';
@@ -77,9 +77,9 @@ $rowCount = $query->num_rows;
                         else{
                             echo '<option value="">Choisir Activité</option>';
                         }
-                        if($rowCount > 0){
-                            while($row = $query->fetch_assoc()){ 
-                                echo '<option value="'.$row['id'].'">'.$row['itemname'].'</option>';
+                        if($query2->num_rows > 0){
+                            while($row2 = $query2->fetch_assoc()){ 
+                                echo '<option value="'.$row2['id'].'">'.$row2['itemname'].'</option>';
                             }
                         }else{
                             echo '<option value="">Cours non disponible</option>';
@@ -132,18 +132,14 @@ echo '<br>'; */
 if (isset($_POST['categorie']) && empty($_POST['activite'])) {
     $query1 = "SELECT 
     count(distinct u.id) as nbr
-    from mdl_course c
-    JOIN mdl_context AS ctx ON c.id = ctx.instanceid
-    JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
-    LEFT JOIN mdl_enrol AS er ON er.courseid = c.id
-    JOIN mdl_user AS u ON u.id = ra.userid
-    LEFT JOIN mdl_user_enrolments AS enr ON enr.enrolid = er.id
-    JOIN mdl_grade_grades AS gg ON gg.userid = u.id
-    JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
-    JOIN mdl_course_categories AS cc ON cc.id = c.category
-    where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) and cc.id = ".$_POST['categorie']." 
-    and ROUND(gg.finalgrade,2) > 0 AND   FROM_UNIXTIME(gg.timemodified,'%d/%m/%Y') is not NULL
-    ";
+    from mdl_user u
+    join mdl_user_enrolments enr on u.id=enr.userid
+    join mdl_enrol er on enr.enrolid=er.id
+    join mdl_course c on er.courseid=c.id
+    JOIN mdl_course_categories cat on cat.id=c.category
+    left join mdl_grade_items gi on c.id=gi.courseid and gi.itemtype<>'course'
+    where  cat.id = ".$_POST['categorie']."  and (select distinct ROUND(gg.finalgrade,2) from mdl_grade_grades AS gg where 
+    gg.itemid=gi.id and  gg.userid=u.id)>=ROUND(gi.gradepass,2)";
     $result1 = mysqli_query($db, $query1);
 
     if (mysqli_num_rows($result1) > 0) {
@@ -161,21 +157,17 @@ if (isset($_POST['categorie']) && empty($_POST['activite'])) {
     f24.data as direction,
     f23.data as dga,
     f12.data as unite
-    from mdl_course c
-    JOIN mdl_context AS ctx ON c.id = ctx.instanceid
-    JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
-    LEFT JOIN mdl_enrol AS er ON er.courseid = c.id
-    JOIN mdl_user AS u ON u.id = ra.userid
-    LEFT JOIN mdl_user_enrolments AS enr ON enr.enrolid = er.id
-    JOIN mdl_grade_grades AS gg ON gg.userid = u.id
-    JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
-    JOIN mdl_course_categories AS cc ON cc.id = c.category
+    from mdl_user u
+    join mdl_user_enrolments enr on u.id=enr.userid
+    join mdl_enrol er on enr.enrolid=er.id
+    join mdl_course c on er.courseid=c.id
+    JOIN mdl_course_categories cat on cat.id=c.category
+    left join mdl_grade_items gi on c.id=gi.courseid and gi.itemtype<>'course'
     LEFT JOIN mdl_user_info_data AS f24  ON u.id = f24.userid and f24.fieldid=24 
     LEFT JOIN mdl_user_info_data AS f23  ON u.id = f23.userid and f23.fieldid=23 
     LEFT JOIN mdl_user_info_data AS f12  ON u.id = f12.userid and f12.fieldid=12 
-    where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) and cc.id = ".$_POST['categorie']."
-    and ROUND(gg.finalgrade,2) > 0 AND   FROM_UNIXTIME(gg.timemodified,'%d/%m/%Y') is not NULL
-    ";
+    where  cat.id = ".$_POST['categorie']." and (select distinct ROUND(gg.finalgrade,2) from mdl_grade_grades AS gg where  gg.itemid=gi.id 
+    and  gg.userid=u.id)>=ROUND(gi.gradepass,2)";
     $result11 = mysqli_query($db,$query11);
     $prenomvalide = array();
     $nomvalide = array();
@@ -205,7 +197,7 @@ if (isset($_POST['categorie']) && empty($_POST['activite'])) {
     JOIN mdl_grade_grades AS gg ON gg.userid = u.id
     JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
     JOIN mdl_course_categories AS cc ON cc.id = c.category
-    where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) and gi.id =".$selected_val."";
+    where  cc.id = ".$_POST['categorie']."";
     $result2 = mysqli_query($db, $query2);
 
     if (mysqli_num_rows($result2) > 0) {
@@ -220,16 +212,14 @@ if (isset($_POST['categorie']) && empty($_POST['activite'])) {
     // Query 3 Collaborateurs n'ayant pas validé la formation
     $query3 = "SELECT 
     count(*) as nbrencours
-    from mdl_course c
-    JOIN mdl_context AS ctx ON c.id = ctx.instanceid
-    JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
-    LEFT JOIN mdl_enrol AS er ON er.courseid = c.id
-    JOIN mdl_user AS u ON u.id = ra.userid
-    LEFT JOIN mdl_user_enrolments AS enr ON enr.enrolid = er.id
-    JOIN mdl_grade_grades AS gg ON gg.userid = u.id
-    JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
-    JOIN mdl_course_categories AS cc ON cc.id = c.category
-    where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) and cc.id = ".$_POST['categorie']." and ROUND(gg.finalgrade,2) is null";
+    from mdl_user u
+    join mdl_user_enrolments enr on u.id=enr.userid
+    join mdl_enrol er on enr.enrolid=er.id
+    join mdl_course c on er.courseid=c.id
+    JOIN mdl_course_categories cat on cat.id=c.category
+    left join mdl_grade_items gi on c.id=gi.courseid and gi.itemtype<>'course'
+    where  cat.id = ".$_POST['categorie']." and (select distinct ROUND(gg.finalgrade,2) from mdl_grade_grades AS gg 
+    where  gg.itemid=gi.id and  gg.userid=u.id)<ROUND(gi.gradepass,2)";
     $result3 = mysqli_query($db, $query3);
 
     if (mysqli_num_rows($result3) > 0) {
@@ -248,20 +238,17 @@ if (isset($_POST['categorie']) && empty($_POST['activite'])) {
     f24.data as direction,
     f23.data as dga,
     f12.data as unite
-    from mdl_course c
-    JOIN mdl_context AS ctx ON c.id = ctx.instanceid
-    JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
-    LEFT JOIN mdl_enrol AS er ON er.courseid = c.id
-    JOIN mdl_user AS u ON u.id = ra.userid
-    LEFT JOIN mdl_user_enrolments AS enr ON enr.enrolid = er.id
+    from mdl_user u
+    join mdl_user_enrolments enr on u.id=enr.userid
+    join mdl_enrol er on enr.enrolid=er.id
+    join mdl_course c on er.courseid=c.id
+    JOIN mdl_course_categories cat on cat.id=c.category
+    left join mdl_grade_items gi on c.id=gi.courseid and gi.itemtype<>'course'
     LEFT JOIN mdl_user_info_data AS f24  ON u.id = f24.userid and f24.fieldid=24 
     LEFT JOIN mdl_user_info_data AS f23  ON u.id = f23.userid and f23.fieldid=23 
     LEFT JOIN mdl_user_info_data AS f12  ON u.id = f12.userid and f12.fieldid=12 
-    JOIN mdl_grade_grades AS gg ON gg.userid = u.id
-    JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
-    JOIN mdl_course_categories AS cc ON cc.id = c.category
-    where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) and cc.id = ".$_POST['categorie']." and ROUND(gg.finalgrade,2) is null
-    ";
+    where  cat.id = ".$_POST['categorie']." and (select distinct ROUND(gg.finalgrade,2) from mdl_grade_grades AS gg 
+    where  gg.itemid=gi.id and  gg.userid=u.id)<ROUND(gi.gradepass,2)";
     $result33 = mysqli_query($db,$query33);
     $prenomnonvalide = array();
     $nomnonvalide = array();
@@ -353,18 +340,13 @@ elseif(isset($_POST['categorie']) && isset($_POST['activite']) && !empty($_POST[
     // Query 1 Collaborateur ayant validé la formation
     $query1 = "SELECT 
     count(distinct u.id) as nbr
-    from mdl_course c
-    JOIN mdl_context AS ctx ON c.id = ctx.instanceid
-    JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
-    LEFT JOIN mdl_enrol AS er ON er.courseid = c.id
-    JOIN mdl_user AS u ON u.id = ra.userid
-    LEFT JOIN mdl_user_enrolments AS enr ON enr.enrolid = er.id
-    JOIN mdl_grade_grades AS gg ON gg.userid = u.id
-    JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
-    JOIN mdl_course_categories AS cc ON cc.id = c.category
-    where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) and gi.id = ".$selected_val." 
-    and ROUND(gg.finalgrade,2) > 0 AND   FROM_UNIXTIME(gg.timemodified,'%d/%m/%Y') is not NULL
-    ";
+    from mdl_user u
+    join mdl_user_enrolments enr on u.id=enr.userid
+    join mdl_enrol er on enr.enrolid=er.id
+    join mdl_course c on er.courseid=c.id
+    JOIN mdl_course_categories cat on cat.id=c.category
+    left join mdl_grade_items gi on c.id=gi.courseid and gi.itemtype<>'course'
+    where  gi.id = ".$selected_val." and (select distinct ROUND(gg.finalgrade,2) from mdl_grade_grades AS gg where  gg.itemid=gi.id and  gg.userid=u.id)>=ROUND(gi.gradepass,2)";
     $result1 = mysqli_query($db, $query1);
 
     if (mysqli_num_rows($result1) > 0) {
@@ -382,21 +364,16 @@ elseif(isset($_POST['categorie']) && isset($_POST['activite']) && !empty($_POST[
     f24.data as direction,
     f23.data as dga,
     f12.data as unite
-    from mdl_course c
-    JOIN mdl_context AS ctx ON c.id = ctx.instanceid
-    JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
-    LEFT JOIN mdl_enrol AS er ON er.courseid = c.id
-    JOIN mdl_user AS u ON u.id = ra.userid
-    LEFT JOIN mdl_user_enrolments AS enr ON enr.enrolid = er.id
-    JOIN mdl_grade_grades AS gg ON gg.userid = u.id
-    JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
-    JOIN mdl_course_categories AS cc ON cc.id = c.category
+    from mdl_user u
+    join mdl_user_enrolments enr on u.id=enr.userid
+    join mdl_enrol er on enr.enrolid=er.id
+    join mdl_course c on er.courseid=c.id
+    JOIN mdl_course_categories cat on cat.id=c.category
+    left join mdl_grade_items gi on c.id=gi.courseid and gi.itemtype<>'course'
     LEFT JOIN mdl_user_info_data AS f24  ON u.id = f24.userid and f24.fieldid=24 
     LEFT JOIN mdl_user_info_data AS f23  ON u.id = f23.userid and f23.fieldid=23 
     LEFT JOIN mdl_user_info_data AS f12  ON u.id = f12.userid and f12.fieldid=12 
-    where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) and gi.id = ".$selected_val."
-    and ROUND(gg.finalgrade,2) > 0 AND   FROM_UNIXTIME(gg.timemodified,'%d/%m/%Y') is not NULL
-    ";
+    where  gi.id = ".$selected_val." and (select distinct ROUND(gg.finalgrade,2) from mdl_grade_grades AS gg where  gg.itemid=gi.id and  gg.userid=u.id)>=ROUND(gi.gradepass,2)";
     $result11 = mysqli_query($db,$query11);
     $prenomvalide = array();
     $nomvalide = array();
@@ -426,7 +403,7 @@ elseif(isset($_POST['categorie']) && isset($_POST['activite']) && !empty($_POST[
     JOIN mdl_grade_grades AS gg ON gg.userid = u.id
     JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
     JOIN mdl_course_categories AS cc ON cc.id = c.category
-    where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) and gi.id =".$selected_val."";
+    where  gi.id =".$selected_val."";
     $result2 = mysqli_query($db, $query2);
 
     if (mysqli_num_rows($result2) > 0) {
@@ -441,16 +418,14 @@ elseif(isset($_POST['categorie']) && isset($_POST['activite']) && !empty($_POST[
     // Query 3 Collaborateurs n'ayant pas validé la formation
     $query3 = "SELECT 
     count(*) as nbrencours
-    from mdl_course c
-    JOIN mdl_context AS ctx ON c.id = ctx.instanceid
-    JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
-    LEFT JOIN mdl_enrol AS er ON er.courseid = c.id
-    JOIN mdl_user AS u ON u.id = ra.userid
-    LEFT JOIN mdl_user_enrolments AS enr ON enr.enrolid = er.id
-    JOIN mdl_grade_grades AS gg ON gg.userid = u.id
-    JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
-    JOIN mdl_course_categories AS cc ON cc.id = c.category
-    where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) and gi.id = ".$selected_val." and ROUND(gg.finalgrade,2) is null";
+    from mdl_user u
+    join mdl_user_enrolments enr on u.id=enr.userid
+    join mdl_enrol er on enr.enrolid=er.id
+    join mdl_course c on er.courseid=c.id
+    JOIN mdl_course_categories cat on cat.id=c.category
+    left join mdl_grade_items gi on c.id=gi.courseid and gi.itemtype<>'course'
+    where  gi.id = ".$selected_val." and (select distinct ROUND(gg.finalgrade,2) from mdl_grade_grades AS gg where  gg.itemid=gi.id and  gg.userid=u.id)<ROUND(gi.gradepass,2)
+    ";
     $result3 = mysqli_query($db, $query3);
 
     if (mysqli_num_rows($result3) > 0) {
@@ -469,19 +444,19 @@ elseif(isset($_POST['categorie']) && isset($_POST['activite']) && !empty($_POST[
     f24.data as direction,
     f23.data as dga,
     f12.data as unite
-    from mdl_course c
-    JOIN mdl_context AS ctx ON c.id = ctx.instanceid
-    JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id
-    LEFT JOIN mdl_enrol AS er ON er.courseid = c.id
-    JOIN mdl_user AS u ON u.id = ra.userid
-    LEFT JOIN mdl_user_enrolments AS enr ON enr.enrolid = er.id
+
+    from mdl_user u
+    join mdl_user_enrolments enr on u.id=enr.userid
+    join mdl_enrol er on enr.enrolid=er.id
+    join mdl_course c on er.courseid=c.id
+    JOIN mdl_course_categories cat on cat.id=c.category
+    left join mdl_grade_items gi on c.id=gi.courseid and gi.itemtype<>'course'
+
     LEFT JOIN mdl_user_info_data AS f24  ON u.id = f24.userid and f24.fieldid=24 
     LEFT JOIN mdl_user_info_data AS f23  ON u.id = f23.userid and f23.fieldid=23 
     LEFT JOIN mdl_user_info_data AS f12  ON u.id = f12.userid and f12.fieldid=12 
-    JOIN mdl_grade_grades AS gg ON gg.userid = u.id
-    JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
-    JOIN mdl_course_categories AS cc ON cc.id = c.category
-    where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) and gi.id = ".$selected_val." and ROUND(gg.finalgrade,2) is null
+
+    where  gi.id = ".$selected_val." and (select distinct ROUND(gg.finalgrade,2) from mdl_grade_grades AS gg where  gg.itemid=gi.id and  gg.userid=u.id)<ROUND(gi.gradepass,2)
     ";
     $result33 = mysqli_query($db,$query33);
     $prenomnonvalide = array();
