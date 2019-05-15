@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "youssef";
 $password = "password";
-$database = "moodle";
+$database = "moodle352";
 
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $database);

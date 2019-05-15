@@ -1,181 +1,139 @@
 <?php
-function arrProcess($string){
-    $arr = array();
-    $s = explode(" ",$string);
-    for ($i=6; $i < sizeof($s) ; $i+=6) { 
-        //echo $s[$i];
-        //echo '<br>';
-        array_push($arr,$s[$i]);
-    }
-    foreach ($arr as $key => $value) {
-        if (!preg_match('/^[a-zA-Z]+/', $value)) {
-            unset($arr[$key]);
-        }
-    }
 
-    return $arr;
-}
-//require_once('/var/www/html/moodle352/lib/excellib.class.php');
-$excellib = '/var/www/html/moodle352/lib/excellib.class.php';
+if (isset($_POST['validequery']) && isset($_POST['nonvalidequery']) && isset($_POST['nonentamequery']) )
+{
+//require_once('/var/www/html/moodle/lib/excellib.class.php');
+//$excellib = '/var/www/html/moodle/lib/excellib.class.php';
+$excellib = '../../../../lib/excellib.class.php';
 if (file_exists($excellib)) {
-
-    $config = '/var/www/html/moodle352/config.php';
-    if (file_exists($config)){
-
-        
+    //$config = '/var/www/html/moodle/config.php';
+    $config = '../../../../config.php';
+    if (file_exists($config)){   
         require_once($config);
         require_once($excellib);
-
-        //$sql = strval($_POST['query']);
-        if (isset($_POST['prenomvalide']) && isset($_POST['nomvalide']) && isset($_POST['prenomnonvalide'])
-        && isset($_POST['nomnonvalide']) && isset($_POST['prenomentame']) && isset($_POST['nomentame'])) {
-            $string1 = $_POST['prenomvalide'];
-            $string2 = $_POST['nomvalide'];
-            $string3 = $_POST['prenomnonvalide'];
-            $string4 = $_POST['nomnonvalide'];
-            $string5 = $_POST['prenomentame'];
-            $string6 = $_POST['nomentame'];
-            
-            $string7= $_POST['matricule1'];
-            $string8= $_POST['direction1'];
-            $string9= $_POST['dga1'];
-            $string10= $_POST['unite1'];
-            $string11= $_POST['matricule2'];
-            $string12= $_POST['direction2'];
-            $string13= $_POST['dga2'];
-            $string14= $_POST['unite2'];
-            $string15= $_POST['matricule3'];
-            $string16= $_POST['direction3'];
-            $string17= $_POST['dga3'];
-            $string18= $_POST['unite3'];
-            //$string19= $_POST[''];
-
-
-
-            $tauxrealisation = $_POST['realisation'];
-            $tauxparticipation = $_POST['participation']; 
-            $tauxechec = $_POST['echec'];
-            $nbrtermine = $_POST['valide'];
-            $nbrstatusencours = $_POST['nonvalide']; 
-            $nbrstatusjamais = $_POST['nonentame'];
+        $sql1 = strval($_POST['validequery']);
+        $sql2 = strval($_POST['nonvalidequery']);
+        $sql3 = strval($_POST['nonentamequery']);
+        $tauxrealisation = $_POST['realisation'];
+        $tauxparticipation = $_POST['participation']; 
+        $tauxechec = $_POST['echec'];
+        $nbrtermine = $_POST['valide'];
+        $nbrstatusencours = $_POST['nonvalide']; 
+        $nbrstatusjamais = $_POST['nonentame'];
+        //db connection
+        $servername = "localhost";
+        $username = "youssef";
+        $password = "password";
+        $database = "moodle352";
+        // Create connection
+        $conn = mysqli_connect($servername, $username, $password, $database);        
+        //end db connection
+        //get data
+        function GetHeaders($conn,$sql)
+        {
+            $data = Array();
+            $result = mysqli_query($conn,$sql); 
+            $i = 0; 
+            while($i<mysqli_num_fields($result)) 
+            { 
+            $meta=mysqli_fetch_field($result); 
+            array_push($data,$meta->name);
+            $i++; 
+            }
+            return $data;
+            //print_r($data);
         }
-        else {
-            echo '0';
+        function DatabaseData($conn,$sql)
+        {
+            $result = mysqli_query($conn,$sql);
+            $columnValues = Array();
+            while ($row = mysqli_fetch_assoc($result)){
+                $columnValues[] = $row;
+            }
+            return $columnValues;
+            //print_r($columnValues);
         }
 
-        //get Data
-        //validé
-        $arr1 = arrProcess($string1);
-        $arr2 = arrProcess($string2);
-        $arr7 = arrProcess($string7);//Matricule
-        $arr8 = arrProcess($string8);//direction
-        $arr9 = arrProcess($string9);//dga
-        $arr10 = arrProcess($string10);//unite
-        //non validé
-        $arr3 = arrProcess($string3);
-        $arr4 = arrProcess($string4);
-        $arr11 = arrProcess($string11);
-        $arr12 = arrProcess($string12);
-        $arr13 = arrProcess($string13);
-        $arr14 = arrProcess($string14);
-        //non entamé
-        $arr5 = arrProcess($string5);
-        $arr6 = arrProcess($string6);
-        $arr15 = arrProcess($string15);
-        $arr16 = arrProcess($string16);
-        $arr17 = arrProcess($string17);
-        $arr18 = arrProcess($string18);
 
-        
-        
+        $headers1 = GetHeaders($conn,$sql1);
+        $data1 = DatabaseData($conn,$sql1);
+
+        $headers2 = GetHeaders($conn,$sql2);
+        $data2 = DatabaseData($conn,$sql2);
+
+        $headers3 = GetHeaders($conn,$sql3);
+        $data3 = DatabaseData($conn,$sql3);
+
         //end get data
-
         $filename = 'Dash_'.(time());
-
         $downloadfilename = clean_filename($filename);
         /// Creating a workbook
         $workbook = new MoodleExcelWorkbook("-");
         /// Sending HTTP headers
         $workbook->send($downloadfilename);
         /// Adding the worksheet
-        $myxls0 = $workbook->add_worksheet("formation validé");
-        $myxls1 = $workbook->add_worksheet("formation non validé");
-        $myxls2 = $workbook->add_worksheet("formation non entamé");
-        $myxls3 = $workbook->add_worksheet("stats");
-
-
-        //formation validé
-        $myxls0->write_string(0, 0, 'Matricule');
-        $myxls0->write_string(0, 1, 'Prénom');
-        $myxls0->write_string(0, 2, 'Nom');
-        $myxls0->write_string(0, 3, 'Direction');
-        $myxls0->write_string(0, 4, 'dga');
-        $myxls0->write_string(0, 5, 'Unité');
-        //formation non validé
-        $myxls1->write_string(0, 0, 'Matricule');
-        $myxls1->write_string(0, 1, 'Prénom');
-        $myxls1->write_string(0, 2, 'Nom');
-        $myxls1->write_string(0, 3, 'Direction');
-        $myxls1->write_string(0, 4, 'dga');
-        $myxls1->write_string(0, 5, 'Unité');
-        //formation non entamé
-        $myxls2->write_string(0, 0, 'Matricule');
-        $myxls2->write_string(0, 1, 'Prénom');
-        $myxls2->write_string(0, 2, 'Nom');
-        $myxls2->write_string(0, 3, 'Direction');
-        $myxls2->write_string(0, 4, 'dga');
-        $myxls2->write_string(0, 5, 'Unité');
-        //stats
-        $myxls3->write_string(2, 9, 'Taux de réalisation');
-        $myxls3->write_string(3, 9, $tauxrealisation.'%');
-        $myxls3->write_string(2, 10, 'Taux de participation');
-        $myxls3->write_string(3, 10, $tauxparticipation.'%');
-        $myxls3->write_string(2, 11, 'Taux d\'échec');
-        $myxls3->write_string(3, 11, $tauxechec.'%');
-        $myxls3->write_string(4, 9, 'Collaborateur ayant validé la formation');
-        $myxls3->write_string(5, 9, $nbrtermine);
-        $myxls3->write_string(4, 10, 'Collaborateurs n\'ayant pas validé la formation');
-        $myxls3->write_string(5, 10, $nbrstatusencours);
-        $myxls3->write_string(4, 11, 'Collaborateurs n\'ayant pas encore entamé a formation');
-        $myxls3->write_string(5, 11, $nbrstatusjamais);
-
-
-        for ($i=1; $i <= sizeof($arr1); $i++) { 
-            $myxls0->write_string($i, 0, $arr7[$i-1]);
-            $myxls0->write_string($i, 1, $arr1[$i-1]);
-            $myxls0->write_string($i, 2, $arr2[$i-1]);
-            $myxls0->write_string($i, 3, $arr8[$i-1]);
-            $myxls0->write_string($i, 4, $arr9[$i-1]);
-            $myxls0->write_string($i, 5, $arr10[$i-1]);
+        $myxls1 = $workbook->add_worksheet("formation validé");
+        for ($i=0; $i < sizeof($headers1); $i++) { 
+            $myxls1->write_string(0, $i, $headers1[$i]);           
         }
-
-        for ($i=1; $i <= sizeof($arr3); $i++) { 
-            $myxls1->write_string($i, 0, $arr11[$i-1]);
-            $myxls1->write_string($i, 1, $arr3[$i-1]);
-            $myxls1->write_string($i, 2, $arr4[$i-1]);
-            $myxls1->write_string($i, 3, $arr12[$i-1]);
-            $myxls1->write_string($i, 4, $arr13[$i-1]);
-            $myxls1->write_string($i, 5, $arr14[$i-1]);
+        // END Headers
+        for ($j=1; $j < sizeof($data1)+2; $j++) { 
+            for ($h=0; $h < sizeof($headers1); $h++) { 
+                $myxls1->write_string($j, $h, $data1[$j-2][$headers1[$h]]);
+            }          
         }
+        $workbook->close();
 
-        for ($i=1; $i <= sizeof($arr5); $i++) { 
-            $myxls2->write_string($i, 0, $arr15[$i-1]);
-            $myxls2->write_string($i, 1, $arr5[$i-1]);
-            $myxls2->write_string($i, 2, $arr6[$i-1]);
-            $myxls2->write_string($i, 3, $arr16[$i-1]);
-            $myxls2->write_string($i, 4, $arr17[$i-1]);
-            $myxls2->write_string($i, 5, $arr18[$i-1]);
+        $myxls2 = $workbook->add_worksheet("formation non validé");
+        for ($i=0; $i < sizeof($headers2); $i++) { 
+            $myxls2->write_string(0, $i, $headers2[$i]);           
         }
+        // END Headers
+        for ($j=1; $j < sizeof($data2)+2; $j++) { 
+            for ($h=0; $h < sizeof($headers2); $h++) { 
+                $myxls2->write_string($j, $h, $data2[$j-2][$headers2[$h]]);
+            }          
+        }
+        $workbook->close();
 
+        $myxls3 = $workbook->add_worksheet("formation non entamé");
+        for ($i=0; $i < sizeof($headers3); $i++) { 
+            $myxls3->write_string(0, $i, $headers3[$i]);           
+        }
+        // END Headers
+        for ($j=1; $j < sizeof($data3)+2; $j++) { 
+            for ($h=0; $h < sizeof($headers3); $h++) { 
+                $myxls3->write_string($j, $h, $data3[$j-2][$headers3[$h]]);
+            }          
+        }
+        $workbook->close();
+
+        $myxls4 = $workbook->add_worksheet("stats");
+        $myxls4->write_string(2, 9, 'Taux de réalisation');
+        $myxls4->write_string(3, 9, $tauxrealisation.'%');
+        $myxls4->write_string(2, 10, 'Taux de participation');
+        $myxls4->write_string(3, 10, $tauxparticipation.'%');
+        $myxls4->write_string(2, 11, 'Taux d\'échec');
+        $myxls4->write_string(3, 11, $tauxechec.'%');
+        $myxls4->write_string(4, 9, 'Collaborateur ayant validé la formation');
+        $myxls4->write_string(5, 9, $nbrtermine);
+        $myxls4->write_string(4, 10, 'Collaborateurs n\'ayant pas validé la formation');
+        $myxls4->write_string(5, 10, $nbrstatusencours);
+        $myxls4->write_string(4, 11, 'Collaborateurs n\'ayant pas encore entamé a formation');
+        $myxls4->write_string(5, 11, $nbrstatusjamais);
 
         $workbook->close();
         exit;
     }
     else{
         echo '10';
-    }
-    
+    }   
 }
 else{
     echo '0';
 }
+
+
+}
+
+?>

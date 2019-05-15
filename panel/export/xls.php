@@ -4,29 +4,19 @@
 //$excellib = '/var/www/html/moodle/lib/excellib.class.php';
 $excellib = '../../../../lib/excellib.class.php';
 if (file_exists($excellib)) {
-
     //$config = '/var/www/html/moodle/config.php';
     $config = '../../../../config.php';
-    if (file_exists($config)){
-
-        
+    if (file_exists($config)){   
         require_once($config);
         require_once($excellib);
-
         $sql = strval($_POST['query']);
-
         //db connection
         $servername = "localhost";
         $username = "youssef";
         $password = "password";
-        $database = "moodle";
-
+        $database = "moodle352";
         // Create connection
-        $conn = mysqli_connect($servername, $username, $password, $database);
-
-
-
-        
+        $conn = mysqli_connect($servername, $username, $password, $database);        
         //end db connection
         //get data
         function GetHeaders($conn,$sql)
@@ -43,7 +33,6 @@ if (file_exists($excellib)) {
             return $data;
             //print_r($data);
         }
-
         function DatabaseData($conn,$sql)
         {
             $result = mysqli_query($conn,$sql);
@@ -54,13 +43,10 @@ if (file_exists($excellib)) {
             return $columnValues;
             //print_r($columnValues);
         }
-
         $headers = GetHeaders($conn,$sql);
         $data = DatabaseData($conn,$sql);
         //end get data
-
         $filename = 'report_'.(time());
-
         $downloadfilename = clean_filename($filename);
         /// Creating a workbook
         $workbook = new MoodleExcelWorkbook("-");
@@ -68,28 +54,21 @@ if (file_exists($excellib)) {
         $workbook->send($downloadfilename);
         /// Adding the worksheet
         $myxls = $workbook->add_worksheet($filename);
-
-
-
         for ($i=0; $i < sizeof($headers); $i++) { 
-            $myxls->write_string(0, $i, utf8_encode($headers[$i]));
-            
+            $myxls->write_string(0, $i, $headers[$i]);           
         }
         // END Headers
         for ($j=1; $j < sizeof($data)+2; $j++) { 
             for ($h=0; $h < sizeof($headers); $h++) { 
-                $myxls->write_string($j, $h, utf8_encode($data[$j-2][$headers[$h]]));
-            }
-            
+                $myxls->write_string($j, $h, $data[$j-2][$headers[$h]]);
+            }          
         }
-
         $workbook->close();
         exit;
     }
     else{
         echo '10';
-    }
-    
+    }   
 }
 else{
     echo '0';

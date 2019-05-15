@@ -14,7 +14,7 @@ $rowCount = $query->num_rows;
             <h1>Admin Dashboard</h1>
         </div>
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-12">
                  <select id="categorie" class="form-control" name="categorie">
                         
                         <?php
@@ -36,57 +36,7 @@ $rowCount = $query->num_rows;
                         }
                         ?>
                   </select>
-            </div>
-
-                <div class="col-sm-4">
-                    <select id="cours" class="form-control" name="cours">
-                        <?php 
-                        if (isset($_POST['categorie']) && isset($_POST['cours'])) {
-                            $sql1 = "SELECT id,fullname from mdl_course where category = ".$_POST['categorie'];
-                            $query1 = $db->query($sql1);
-                            $row1 = $query1->fetch_assoc();
-                            echo '<option value="'.$_POST['cours'].'">'.$row1['fullname'].'</option>';
-                        }
-                        else{
-                            echo '<option value="">Choisir catégorie</option>';
-                        }
-                        if($rowCount > 0){
-                            while($row = $query->fetch_assoc()){ 
-                                echo '<option value="'.$row['id'].'">'.$row['fullname'].'</option>';
-                            }
-                        }else{
-                            echo '<option value="">Catégorie non disponible</option>';
-                        }
-                        ?>
-                        
-                    </select>
-                    <br>
-                </div>
-
-                <div class="col-sm-4">
-                    <select id="activite" class="form-control" name="activite">
-                        <?php
-                        if (isset($_POST['categorie']) && isset($_POST['cours']) && isset($_POST['activite'])) {
-                            $sql2 = "SELECT id,itemname from mdl_grade_items where courseid = ".$_POST['cours']." AND itemtype <> 'course'";
-                            $query2 = $db->query($sql2);
-                            $row2 = $query2->fetch_assoc();
-                            echo '<option value="'.$_POST['cours'].'">'.$row2['itemname'].'</option>';
-                        }
-                        else{
-                            echo '<option value="">Choisir Activité</option>';
-                        }
-                        if($rowCount > 0){
-                            while($row = $query->fetch_assoc()){ 
-                                echo '<option value="'.$row['id'].'">'.$row['itemname'].'</option>';
-                            }
-                        }else{
-                            echo '<option value="">Cours non disponible</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
-
-                            
+            </div>                       
         </div>
         <div class="row">
                 <div class="col-sm-12" align="center">
@@ -97,13 +47,6 @@ $rowCount = $query->num_rows;
 
     <?php
 
-    if(!isset($_POST['SubmitButton'])){
-        $selected_val = 'NULL'; // L'ID de l'activité
-    }
-    else{
-        $selected_val = $_POST['activite'];
-    }
-
 
 // Filtrer selon la catégorie seule
 
@@ -112,7 +55,7 @@ $rowCount = $query->num_rows;
 
 
 // Filtre selon activité
-if(isset($_POST['categorie']) && isset($_POST['cours']) && isset($_POST['activite'])){
+
     // Custom queries 
     // Nbr total des collaborateur qui ont validé l'activité.
     $query1 = "SELECT 
@@ -123,7 +66,8 @@ if(isset($_POST['categorie']) && isset($_POST['cours']) && isset($_POST['activit
     join mdl_course c on er.courseid=c.id
     JOIN mdl_course_categories cat on cat.id=c.category
     left join mdl_grade_items gi on c.id=gi.courseid and gi.itemtype<>'course'
-    where  gi.id = ".$selected_val." and (select distinct ROUND(gg.finalgrade,2) from mdl_grade_grades AS gg where  gg.itemid=gi.id and  gg.userid=u.id)>=ROUND(gi.gradepass,2)";
+    where  cat.id = ".$_POST['categorie']."  and (select distinct ROUND(gg.finalgrade,2) from mdl_grade_grades AS gg where 
+    gg.itemid=gi.id and  gg.userid=u.id)>=ROUND(gi.gradepass,2)";
     $result1 = mysqli_query($db, $query1);
 
     if (mysqli_num_rows($result1) > 0) {
@@ -134,7 +78,7 @@ if(isset($_POST['categorie']) && isset($_POST['cours']) && isset($_POST['activit
     } else {
         $nbrtermine = 0;
     }
-    //liste des collaborateur qui ont validé la formation
+    //Nbr des collaborateur qui ont validé la formation
     $query11 = "SELECT 
     u.idnumber as matricule,
     u.firstname,
@@ -151,7 +95,8 @@ if(isset($_POST['categorie']) && isset($_POST['cours']) && isset($_POST['activit
     LEFT JOIN mdl_user_info_data AS f24  ON u.id = f24.userid and f24.fieldid=24 
     LEFT JOIN mdl_user_info_data AS f23  ON u.id = f23.userid and f23.fieldid=23 
     LEFT JOIN mdl_user_info_data AS f12  ON u.id = f12.userid and f12.fieldid=12 
-    where  gi.id = ".$selected_val." and (select distinct ROUND(gg.finalgrade,2) from mdl_grade_grades AS gg where  gg.itemid=gi.id and  gg.userid=u.id)>=ROUND(gi.gradepass,2)";
+    where  cat.id = ".$_POST['categorie']." and (select distinct ROUND(gg.finalgrade,2) from mdl_grade_grades AS gg where  gg.itemid=gi.id 
+    and  gg.userid=u.id)>=ROUND(gi.gradepass,2)";
     $result11 = mysqli_query($db,$query11);
     $prenomvalide = array();
     $nomvalide = array();
@@ -181,7 +126,7 @@ if(isset($_POST['categorie']) && isset($_POST['cours']) && isset($_POST['activit
     JOIN mdl_grade_grades AS gg ON gg.userid = u.id
     JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
     JOIN mdl_course_categories AS cc ON cc.id = c.category
-    where  gi.id =".$selected_val."";
+    where  cc.id = ".$_POST['categorie']."";
     $result2 = mysqli_query($db, $query2);
 
     if (mysqli_num_rows($result2) > 0) {
@@ -202,8 +147,8 @@ if(isset($_POST['categorie']) && isset($_POST['cours']) && isset($_POST['activit
     join mdl_course c on er.courseid=c.id
     JOIN mdl_course_categories cat on cat.id=c.category
     left join mdl_grade_items gi on c.id=gi.courseid and gi.itemtype<>'course'
-    where  gi.id = ".$selected_val." and (select distinct ROUND(gg.finalgrade,2) from mdl_grade_grades AS gg where  gg.itemid=gi.id and  gg.userid=u.id)<ROUND(gi.gradepass,2)
-    ";
+    where  cat.id = ".$_POST['categorie']." and (select distinct ROUND(gg.finalgrade,2) from mdl_grade_grades AS gg 
+    where  gg.itemid=gi.id and  gg.userid=u.id)<ROUND(gi.gradepass,2)";
     $result3 = mysqli_query($db, $query3);
 
     if (mysqli_num_rows($result3) > 0) {
@@ -222,20 +167,17 @@ if(isset($_POST['categorie']) && isset($_POST['cours']) && isset($_POST['activit
     f24.data as direction,
     f23.data as dga,
     f12.data as unite
-
     from mdl_user u
     join mdl_user_enrolments enr on u.id=enr.userid
     join mdl_enrol er on enr.enrolid=er.id
     join mdl_course c on er.courseid=c.id
     JOIN mdl_course_categories cat on cat.id=c.category
     left join mdl_grade_items gi on c.id=gi.courseid and gi.itemtype<>'course'
-
     LEFT JOIN mdl_user_info_data AS f24  ON u.id = f24.userid and f24.fieldid=24 
     LEFT JOIN mdl_user_info_data AS f23  ON u.id = f23.userid and f23.fieldid=23 
     LEFT JOIN mdl_user_info_data AS f12  ON u.id = f12.userid and f12.fieldid=12 
-
-    where  gi.id = ".$selected_val." and (select distinct ROUND(gg.finalgrade,2) from mdl_grade_grades AS gg where  gg.itemid=gi.id and  gg.userid=u.id)<ROUND(gi.gradepass,2)
-    ";
+    where  cat.id = ".$_POST['categorie']." and (select distinct ROUND(gg.finalgrade,2) from mdl_grade_grades AS gg 
+    where  gg.itemid=gi.id and  gg.userid=u.id)<ROUND(gi.gradepass,2)";
     $result33 = mysqli_query($db,$query33);
     $prenomnonvalide = array();
     $nomnonvalide = array();
@@ -265,7 +207,7 @@ if(isset($_POST['categorie']) && isset($_POST['cours']) && isset($_POST['activit
     JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
     JOIN mdl_course_categories AS cc ON cc.id = c.category
     where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) 
-    and gi.id = ".$selected_val." and (select count(*) from mdl_quiz_attempts A,mdl_quiz B where A.userid = u.id and B.course = c.id and A.quiz = B.id)=0
+    and cc.id = ".$_POST['categorie']." and (select count(*) from mdl_quiz_attempts A,mdl_quiz B where A.userid = u.id and B.course = c.id and A.quiz = B.id)=0
     and ROUND(gg.finalgrade,2) is null";
     $result4 = mysqli_query($db, $query4);
 
@@ -298,7 +240,7 @@ if(isset($_POST['categorie']) && isset($_POST['cours']) && isset($_POST['activit
     JOIN mdl_grade_items AS gi ON gi.id = gg.itemid and gi.itemmodule='quiz'
     JOIN mdl_course_categories AS cc ON cc.id = c.category
     where (gi.courseid = c.id  and enr.userid = u.id and enr.status = 0  ) 
-    and gi.id = ".$selected_val." and (select count(*) from mdl_quiz_attempts A,mdl_quiz B where A.userid = u.id and B.course = c.id and A.quiz = B.id)=0
+    and cc.id = ".$_POST['categorie']." and (select count(*) from mdl_quiz_attempts A,mdl_quiz B where A.userid = u.id and B.course = c.id and A.quiz = B.id)=0
     and ROUND(gg.finalgrade,2) is null
     ";
     $result44 = mysqli_query($db,$query44);
@@ -319,7 +261,7 @@ if(isset($_POST['categorie']) && isset($_POST['cours']) && isset($_POST['activit
 
 //END Custom queries
 
-}
+
 //Fin filtre selon activité
 
 
@@ -547,13 +489,30 @@ if(is_nan($tauxechec )) $tauxechec = 0 ;
                 <input type="hidden" name="valide" id="hiddenField" value="<?php echo $nbrtermine ?>"/>
                 <input type="hidden" name="nonvalide" id="hiddenField" value="<?php echo $nbrstatusencours ?>"/>
                 <input type="hidden" name="nonentame" id="hiddenField" value="<?php echo $nbrstatusjamais ?>"/>
-
-                <input type="hidden" name="validequery" id="hiddenField" value="<?php echo  $query11 ?>"/>
-                <input type="hidden" name="nonvalidequery" id="hiddenField" value="<?php echo $query33  ?>"/>
-                <input type="hidden" name="nonentamequery" id="hiddenField" value="<?php echo $query44 ?>"/>
                 
 
-                
+                <input type="hidden" name="prenomvalide" id="hiddenField" value="<?php print_r($prenomvalide)  ?>"/>
+                <input type="hidden" name="nomvalide" id="hiddenField" value="<?php print_r($nomvalide) ?>"/>
+                <input type="hidden" name="matricule1" id="hiddenField" value="<?php print_r($matricule1)  ?>"/>
+                <input type="hidden" name="direction1" id="hiddenField" value="<?php print_r($direction1) ?>"/>
+                <input type="hidden" name="dga1" id="hiddenField" value="<?php print_r($dga1)  ?>"/>
+                <input type="hidden" name="unite1" id="hiddenField" value="<?php print_r($unite1) ?>"/>
+
+
+                <input type="hidden" name="prenomnonvalide" id="hiddenField" value="<?php print_r($prenomnonvalide)  ?>"/>
+                <input type="hidden" name="nomnonvalide" id="hiddenField" value="<?php print_r($nomnonvalide) ?>"/>
+                <input type="hidden" name="matricule2" id="hiddenField" value="<?php print_r($matricule2)  ?>"/>
+                <input type="hidden" name="direction2" id="hiddenField" value="<?php print_r($direction2) ?>"/>
+                <input type="hidden" name="dga2" id="hiddenField" value="<?php print_r($dga2)  ?>"/>
+                <input type="hidden" name="unite2" id="hiddenField" value="<?php print_r($unite2) ?>"/>
+
+
+                <input type="hidden" name="prenomentame" id="hiddenField" value="<?php print_r($prenomentame)  ?>"/>
+                <input type="hidden" name="nomentame" id="hiddenField" value="<?php print_r($nomentame) ?>"/>
+                <input type="hidden" name="matricule3" id="hiddenField" value="<?php print_r($matricule3)  ?>"/>
+                <input type="hidden" name="direction3" id="hiddenField" value="<?php print_r($direction3) ?>"/>
+                <input type="hidden" name="dga3" id="hiddenField" value="<?php print_r($dga3)  ?>"/>
+                <input type="hidden" name="unite3" id="hiddenField" value="<?php print_r($unite3) ?>"/>
 
 
                 <input type="submit" name="SubmitButton" class="btn btn-success" value="Télécharger Excel" /><br>

@@ -3,7 +3,7 @@
 $dbHost     = 'localhost';
 $dbUsername = 'youssef';
 $dbPassword = 'password';
-$dbName     = 'moodle';
+$dbName     = 'moodle352';
 
 //Connect and select the database
 $db = new mysqli($dbHost, $dbUsername, $dbPassword, $dbName);

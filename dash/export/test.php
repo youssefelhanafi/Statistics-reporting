@@ -109,6 +109,7 @@ foreach ($arr1 as $key => $value) {
         unset($arr1[$key]);
     }
 }
+/*
 echo '<pre>';
 print_r($arr1);
 echo '</pre>';  */
