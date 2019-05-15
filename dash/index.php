@@ -30,8 +30,8 @@ $rowCount = $query->num_rows;
                             echo '<option value="">Choisir catégorie</option>';
                         }
                         if($rowCount > 0){
-                            while($rowi = $queryi->fetch_assoc()){ 
-                                echo '<option value="'.$rowi['id'].'">'.$rowi['name'].'</option>';
+                            while($row = $query->fetch_assoc()){ 
+                                echo '<option value="'.$row['id'].'">'.$row['name'].'</option>';
                             }
                         }else{
                             echo '<option value="">Catégorie non disponible</option>';
@@ -52,9 +52,9 @@ $rowCount = $query->num_rows;
                         else{
                             echo '<option value="">Choisir catégorie</option>';
                         }
-                        if($query1->num_rows > 0){
-                            while($row1 = $query1->fetch_assoc()){ 
-                                echo '<option value="'.$row1['id'].'">'.$row1['fullname'].'</option>';
+                        if($rowCount > 0){
+                            while($row = $query->fetch_assoc()){ 
+                                echo '<option value="'.$row['id'].'">'.$row['fullname'].'</option>';
                             }
                         }else{
                             echo '<option value="">Catégorie non disponible</option>';
@@ -77,9 +77,9 @@ $rowCount = $query->num_rows;
                         else{
                             echo '<option value="">Choisir Activité</option>';
                         }
-                        if($query2->num_rows > 0){
-                            while($row2 = $query2->fetch_assoc()){ 
-                                echo '<option value="'.$row2['id'].'">'.$row2['itemname'].'</option>';
+                        if($rowCount > 0){
+                            while($row = $query->fetch_assoc()){ 
+                                echo '<option value="'.$row['id'].'">'.$row['itemname'].'</option>';
                             }
                         }else{
                             echo '<option value="">Cours non disponible</option>';
