@@ -97,15 +97,18 @@ $rowCount = $query->num_rows;
 
     <?php
 
-    if(!isset($_POST['SubmitButton'])){
+    /* if(!isset($_POST['SubmitButton'])){
         $selected_val = 'NULL'; // L'ID de l'activité
     }
     else{
         $selected_val = $_POST['activite'];
-    }
+    } */
 
 
 // Filtrer selon la catégorie seule
+if (isset($_POST['categorie']) && !isset($_POST['cours']) || !isset($_POST['activite'])) {
+    
+}
 
 // Fin filtre selon catégorie
 
@@ -113,6 +116,7 @@ $rowCount = $query->num_rows;
 
 // Filtre selon activité
 if(isset($_POST['categorie']) && isset($_POST['cours']) && isset($_POST['activite'])){
+    $selected_val = $_POST['activite'];
     // Custom queries 
     // Nbr total des collaborateur qui ont validé l'activité.
     $query1 = "SELECT 
@@ -319,6 +323,9 @@ if(isset($_POST['categorie']) && isset($_POST['cours']) && isset($_POST['activit
 
 //END Custom queries
 
+}
+elseif (isset($_POST['categorie']) && empty($_POST['cours']) && empty($_POST['activite'])) {
+    echo $_POST['categorie'];
 }
 //Fin filtre selon activité
 
